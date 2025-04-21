@@ -1,5 +1,68 @@
-<div class="grid grid-cols-5 gap-4 mr-9">
-  @for (product of products ; track product.id) {
-  <app-product-item [product]="product"></app-product-item>
-  }
+<div class="felx flex-col gap-3 mr-10">
+  <div class="flex justify-between mr-2 gap-3">
+    <form
+      #searchForm="ngForm"
+      (ngSubmit)="onSearchChange()"
+      class="relative flex items-center w-full max-w-md mx-4"
+    >
+      <input
+        type="search"
+        class="block w-full p-4 text-sm text-gray-900 boreder boreder-gray-300 rounded-lg"
+        placeholder="Search"
+        name="search"
+        [(ngModel)]="shopParams.search"
+      />
+      <button
+        mat-icon-button
+        type="submit"
+        class="absolute inset-y-0 right-8 top-2 flex items-center pl-3"
+      >
+        <mat-icon>search</mat-icon>
+      </button>
+    </form>
+    <div class="flex gap-3">
+      <button
+        class="match-input-height"
+        mat-stroked-button
+        (click)="openFilterDialog()"
+      >
+        <mat-icon>filter_list</mat-icon>
+        Filters
+      </button>
+      <button
+        class="match-input-height"
+        mat-stroked-button
+        [matMenuTriggerFor]="sortMenu"
+      >
+        <mat-icon>swap_vert</mat-icon>
+        Sort
+      </button>
+    </div>
+  </div>
+  <div
+    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 p-2"
+  >
+    @for (product of products ; track product.id) {
+    <app-product-item
+      style="border: 2px solid"
+      [product]="product"
+    ></app-product-item>
+    }
+  </div>
 </div>
+
+<mat-menu #sortMenu="matMenu">
+  <mat-selection-list
+    [multiple]="false"
+    (selectionChange)="onSortChange($event)"
+  >
+    @for (sort of sortOption; track $index) {
+    <mat-list-option
+      [value]="sort.value"
+      [selected]="shopParams.sort === sort.value"
+    >
+      {{ sort.name }}
+    </mat-list-option>
+    }
+  </mat-selection-list>
+</mat-menu>

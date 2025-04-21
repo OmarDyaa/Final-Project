@@ -1,0 +1,23 @@
+:host {
+  display: block;
+}
+
+mat-card {
+  @apply w-full h-[380px] flex flex-col;
+}
+
+img {
+  @apply w-full h-48 object-contain p-4;
+}
+
+mat-card-content {
+  @apply flex-grow;
+
+  h2 {
+    @apply h-12 overflow-hidden;
+  }
+}
+
+mat-card-actions {
+  @apply p-4;
+}
