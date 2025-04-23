@@ -8,7 +8,7 @@ import { ShopParams } from '../../shared/models/shopParams';
   providedIn: 'root',
 })
 export class ShopService {
-  bsaeUrl = 'https://fakestoreapi.com/';
+  bsaeUrl = 'https://localhost:5001/api/';
   private http = inject(HttpClient);
   types: string[] = [];
   brands: string[] = [];
@@ -30,19 +30,19 @@ export class ShopService {
     params = params.append('pageSize', shopParams.pageSize);
     params = params.append('pageIndex', shopParams.pageNumber);
 
-    return this.http.get<Product[]>(this.bsaeUrl + 'products', { params });
+    return this.http.get<Pagination<Product>>(this.bsaeUrl + 'products', {
+      params,
+    });
+  }
+
+  getProduct(id: number) {
+    return this.http.get<Product>(this.bsaeUrl + 'products/' + id);
   }
   getBrands() {
-    if (this.brands.length > 0) return;
-    return this.http.get<string[]>(this.bsaeUrl + 'products/brands').subscribe({
-      next: (respose) => (this.brands = respose),
-    });
+    return this.http.get<string[]>(this.bsaeUrl + 'products/brands');
   }
   getTypes() {
-    if (this.types.length > 0) return;
-    return this.http.get<string[]>(this.bsaeUrl + 'products/types').subscribe({
-      next: (response) => (this.types = response),
-    });
+    return this.http.get<string[]>(this.bsaeUrl + 'products/types');
   }
   constructor() {}
 }

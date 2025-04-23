@@ -14,8 +14,9 @@ import {
   MatSelectionListChange,
 } from '@angular/material/list';
 import { ShopParams } from '../../shared/models/shopParams';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { FormsModule } from '@angular/forms';
+import { Pagination } from '../../shared/models/pagination';
 
 @Component({
   selector: 'app-shop',
@@ -35,10 +36,10 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './shop.component.scss',
 })
 export class ShopComponent implements OnInit {
+  title = 'Store';
   private shopService = inject(ShopService);
   private dailogService = inject(MatDialog);
-  title = 'Store';
-  products: Product[] = [];
+  products?: Pagination<Product>;
   sortOption = [
     { name: 'Alphabetical', value: 'name' },
     { name: 'Price: Low-High', value: 'priceAsc' },
@@ -46,7 +47,7 @@ export class ShopComponent implements OnInit {
   ];
 
   shopParams = new ShopParams();
-
+  pageSizeOptions = [5, 10, 15, 20];
   ngOnInit(): void {
     this.initializeShop();
   }
@@ -59,10 +60,15 @@ export class ShopComponent implements OnInit {
 
   getProducts() {
     this.shopService.getProducts(this.shopParams).subscribe({
-      // next: (response) => (this.products = response.data),
       next: (response) => (this.products = response),
       error: (error) => console.log(error),
     });
+  }
+
+  handelPageEvent(e: PageEvent) {
+    this.shopParams.pageNumber = e.pageIndex + 1;
+    this.shopParams.pageSize = e.pageSize;
+    this.getProducts();
   }
 
   onSearchChange() {
@@ -74,9 +80,11 @@ export class ShopComponent implements OnInit {
     const selectedOption = event.options[0];
     if (selectedOption) {
       this.shopParams.sort = selectedOption.value;
+      this.shopParams.pageNumber = 1;
       this.getProducts();
     }
   }
+
   openFilterDialog() {
     const dailogRef = this.dailogService.open(FiltersDailogComponent, {
       minWidth: '500px',
@@ -88,9 +96,9 @@ export class ShopComponent implements OnInit {
     dailogRef.afterClosed().subscribe({
       next: (result) => {
         if (result) {
-          console.log(result);
           this.shopParams.brands = result.selectedBrands;
           this.shopParams.types = result.selectedTypes;
+          this.shopParams.pageNumber = 1;
           // Applay Filters
           this.getProducts();
         }

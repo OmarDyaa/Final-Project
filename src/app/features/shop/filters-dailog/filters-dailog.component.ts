@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ShopService } from '../../../core/services/shop.service';
 import { MatDivider } from '@angular/material/divider';
 import { MatListOption, MatSelectionList } from '@angular/material/list';
@@ -18,12 +18,30 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './filters-dailog.component.html',
   styleUrl: './filters-dailog.component.scss',
 })
-export class FiltersDailogComponent {
+export class FiltersDailogComponent implements OnInit {
   shopService = inject(ShopService);
   private dailogRef = inject(MatDialogRef<FiltersDailogComponent>);
   data = inject(MAT_DIALOG_DATA);
   selectedBrands: string[] = this.data.selectedBrands;
   selectedTypes: string[] = this.data.selectedTypes;
+  availableBrands: string[] = [];
+  availableTypes: string[] = [];
+
+  ngOnInit() {
+    // Get brands
+    this.shopService.getBrands().subscribe({
+      next: (brands) => {
+        this.availableBrands = brands;
+      },
+    });
+
+    // Get types
+    this.shopService.getTypes().subscribe({
+      next: (types) => {
+        this.availableTypes = types;
+      },
+    });
+  }
 
   applyFilters() {
     this.dailogRef.close({
@@ -31,7 +49,4 @@ export class FiltersDailogComponent {
       selectedTypes: this.selectedTypes,
     });
   }
-  // Demo Data
-  brands = ['lG', 'Samsung', 'Toshipa'];
-  types = ['TV', 'Dish washer'];
 }
