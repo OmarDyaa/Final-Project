@@ -18,3 +18,8 @@ a {
     border-bottom: 2px solid #7d00fa;
   }
 }
+
+a:hover{
+  cursor: pointer;
+  color: rgba(125, 0, 250, 0.3);
+}
