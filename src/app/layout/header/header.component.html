@@ -1,4 +1,4 @@
-<header class="border-b shadow-md p-3 w-full">
+<header class="border-b shadow-md p-3 w-full max-h-20 fixed top-0 z-50 bg-white">
   <div
     class="flex align-middle items-center justify-between max-w-screen-2xl mx-auto"
   >
@@ -8,7 +8,7 @@
       alt="app logo"
       class="max-h-16"
     />
-    <nav class="flex gap-3 my-2 uppercase text-2xl">
+    <nav class="flex gap-8 my-2 uppercase text-2xl font-semibold">
       <a
         routerLink="/"
         routerLinkActive="active"
@@ -16,7 +16,7 @@
         >Home</a
       >
       <a routerLink="/shop" routerLinkActive="active">Shop</a>
-      <a routerLink="/test-error" routerLinkActive="active">Errors test</a>
+      <a routerLink="/test-error" routerLinkActive="active">Errors</a>
       <a>Contact Us</a>
     </nav>
 
@@ -29,3 +29,6 @@
     </div>
   </div>
 </header>
+@if(busyService.loading){
+  <mat-progress-bar mode="indeterminate" class="fixed top-20 z-50"></mat-progress-bar>
+}

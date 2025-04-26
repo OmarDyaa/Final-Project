@@ -49,3 +49,15 @@ button.match-input-height {
 .mdc-notched-outline__notch {
   border-right-style: none !important;
 }
+
+.mat-mdc-snack-bar-container.snack-error{
+  --mdc-snackbar-container-color: red;
+  --mdc-snack-bar-button-color: rgb(255, 255, 255);
+  --mdc-snackbar-supporting-text-color: rgb(255, 255, 255);
+}
+
+.mat-mdc-snack-bar-container.snack-success{
+  --mdc-snackbar-container-color: green;
+  --mdc-snack-bar-button-color: rgb(255, 255, 255);
+  --mdc-snackbar-supporting-text-color: rgb(255, 255, 255);
+}

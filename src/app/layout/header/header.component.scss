@@ -12,7 +12,9 @@
 }
 
 a {
+  transition: 0.3s linear;
   &.active {
     color: #7d00fa;
+    border-bottom: 2px solid #7d00fa;
   }
 }
