@@ -23,7 +23,10 @@
     </nav>
 
     <div class="flex gap-3 align-middle">
-      <a matBadge="5" matBadgeSize="large" class="custom-badge mt-2 mr-2">
+      <a
+      routerLink="/cart"
+      routerLinkActive="active"
+       matBadge="{{cartservice.itemsCount()}}" matBadgeSize="large" class="custom-badge mt-2 mr-2">
         <mat-icon>shopping_cart</mat-icon>
       </a>
       @if(accountService.currentUser()){
