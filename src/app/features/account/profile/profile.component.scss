@@ -1,0 +1,36 @@
+.profile-card {
+  background: linear-gradient(to bottom, #ffffff, #f8fafc);
+  border: none;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+:host ::ng-deep {
+  .mat-icon {
+    height: 24px;
+    width: 24px;
+
+    &.text-6xl {
+      height: 48px;
+      width: 48px;
+      font-size: 48px;
+    }
+  }
+
+  .mat-card {
+    transition: transform 0.2s ease-in-out;
+
+    &:hover {
+      transform: translateY(-2px);
+    }
+  }
+}
+
+button[mat-flat-button] {
+  padding: 0.5rem 2rem;
+  font-weight: 500;
+  letter-spacing: 0.025em;
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+}

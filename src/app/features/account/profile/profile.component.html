@@ -1,0 +1,76 @@
+<div class="container mx-auto mt-24 max-w-4xl px-4">
+  <mat-card class="profile-card">
+    <div class="p-8">
+      <div class="text-center mb-8">
+        <div
+          class="inline-block p-4 rounded-full bg-primary bg-opacity-10 mb-4"
+        >
+          <mat-icon class="text-6xl text-primary">account_circle</mat-icon>
+        </div>
+        <h2 class="text-2xl font-semibold text-gray-800">User Profile</h2>
+      </div>
+
+      @if(user){
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Personal Information Section -->
+        <mat-card class="p-6 bg-white rounded-lg shadow-sm">
+          <h3 class="text-lg font-semibold mb-4 text-gray-700">
+            <mat-icon class="align-middle mr-2">person</mat-icon>
+            Personal Information
+          </h3>
+          <mat-divider class="mb-4"></mat-divider>
+          <div class="space-y-4">
+            <div class="flex flex-col">
+              <span class="text-sm text-gray-500">Full Name</span>
+              <span class="font-medium text-gray-800"
+                >{{ user.firstName }} {{ user.lastName }}</span
+              >
+            </div>
+            <div class="flex flex-col">
+              <span class="text-sm text-gray-500">Email</span>
+              <span class="font-medium text-gray-800">{{ user.email }}</span>
+            </div>
+          </div>
+        </mat-card>
+
+        <!-- Address Information Section -->
+        @if(user.address){
+        <mat-card class="p-6 bg-white rounded-lg shadow-sm">
+          <h3 class="text-lg font-semibold mb-4 text-gray-700">
+            <mat-icon class="align-middle mr-2">home</mat-icon>
+            Address Information
+          </h3>
+          <mat-divider class="mb-4"></mat-divider>
+          <div class="space-y-4">
+            <div class="flex flex-col">
+              <span class="text-sm text-gray-500">Street Address</span>
+              <span class="font-medium text-gray-800">{{
+                user.address.line1
+              }}</span>
+              @if(user.address.line2){
+              <span class="font-medium text-gray-800">{{
+                user.address.line2
+              }}</span>
+              }
+            </div>
+            <div class="flex flex-col">
+              <span class="text-sm text-gray-500">City & State</span>
+              <span class="font-medium text-gray-800"
+                >{{ user.address.city }}, {{ user.address.state }}</span
+              >
+            </div>
+            <div class="flex flex-col">
+              <span class="text-sm text-gray-500">Country & Postal Code</span>
+              <span class="font-medium text-gray-800"
+                >{{ user.address.country }}, {{ user.address.postalCode }}</span
+              >
+            </div>
+          </div>
+        </mat-card>
+        }
+      </div>
+
+      }
+    </div>
+  </mat-card>
+</div>
