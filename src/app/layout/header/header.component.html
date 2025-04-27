@@ -33,9 +33,11 @@
         <mat-icon>shopping_cart</mat-icon>
       </a>
       @if(accountService.currentUser()){
-      <button mat-stroked-button [mat-menu-trigger-for]="menu">Logout</button>
-      <mat-icon>arrow_drop_down</mat-icon>
-      <span>{{ accountService.currentUser()?.email }}</span>
+      <span class="my-2">{{ accountService.currentUser()?.email }}</span>
+      <mat-icon class="my-2" [mat-menu-trigger-for]="menu"
+        >arrow_drop_down</mat-icon
+      >
+      <!-- <button mat-stroked-button (click)="logout()">Logout</button> -->
       }@else {
       <button routerLink="/account/login" mat-stroked-button>Login</button>
       <button routerLink="/account/register" mat-stroked-button>
