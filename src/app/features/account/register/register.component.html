@@ -23,10 +23,10 @@
     }
 
     <button
-      type="submit"
+      [disabled]="registerForm.invalid"
       mat-flat-button
       class="w-full py-2"
-      [disabled]="registerForm.invalid"
+      type="submit"
     >
       Register
     </button>
