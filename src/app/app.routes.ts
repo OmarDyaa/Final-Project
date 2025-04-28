@@ -12,6 +12,8 @@ import { NotFoundComponent } from './shared/components/not-found/not-found.compo
 import { ServerErrorComponent } from './shared/components/server-error/server-error.component';
 import { authGuard } from './core/guards/auth.guard';
 import { emptyCartGuard } from './core/guards/empty-cart.guard';
+import { OrderComponent } from './features/orders/order.component';
+import { OrderDetailedComponent } from './features/orders/order-detailed/order-detailed.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -23,6 +25,17 @@ export const routes: Routes = [
     component: CheckoutComponent,
     canActivate: [authGuard, emptyCartGuard],
   },
+  {
+    path: 'order',
+    component: OrderComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'order/:id',
+    component: OrderDetailedComponent,
+    canActivate: [authGuard],
+  },
+
   { path: 'test-error', component: TestErrorComponent },
   { path: 'not-found', component: NotFoundComponent },
   { path: 'server-error', component: ServerErrorComponent },
