@@ -9,6 +9,7 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { BusyService } from '../../core/services/busy.service';
 import { AccountService } from '../../core/services/account.service';
 import { CartService } from '../../core/services/cart.service';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-header',
@@ -23,6 +24,7 @@ import { CartService } from '../../core/services/cart.service';
     MatMenuItem,
     MatDivider,
     MatProgressBar,
+    NgIf
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
@@ -32,6 +34,12 @@ export class HeaderComponent {
   cartservice = inject(CartService);
   accountService = inject(AccountService);
   private router = inject(Router);
+  
+  isMobileMenuOpen = false;
+
+  toggleMobileMenu() {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
 
   logout() {
     this.accountService.logout().subscribe({

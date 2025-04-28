@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { Address, User } from '../../shared/models/user';
 import { environment } from '../../../environments/environment.development';
-import { map } from 'rxjs';
+import { map, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +20,7 @@ export class AccountService {
     });
   }
   register(values: any) {
-    return this.http.post((this.baseUrl = 'account/register'), values);
+    return this.http.post(this.baseUrl + 'account/register', values);
   }
   getUserInfo() {
     return this.http.get<User>(this.baseUrl + 'account/user-info').pipe(
@@ -32,8 +32,17 @@ export class AccountService {
   logout() {
     return this.http.post(this.baseUrl + 'account/logout', {});
   }
-  updateAddres(address: Address) {
-    return this.http.post(this.baseUrl + 'account/address', address);
+  updateAddress(address: Address) {
+    return this.http.post(this.baseUrl + 'account/address', address).pipe(
+      tap(()=>{
+        this.currentUser.update(user => {
+          if (user) {
+            user.address = address;
+          }
+          return user;
+        })
+      })
+    )
   }
   getAuthState() {
     return this.http.get<{ isAuthenticated: boolean }>(
