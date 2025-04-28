@@ -85,12 +85,12 @@ export class CartService {
   }
 
   deleteCart() {
-this.http.delete(this.baseUrl + 'cart?id' + this.cart()?.id).subscribe({
-  next: () => {
-    localStorage.removeItem('cart_id');
-    this.cart.set(null);
-  }
-});
+    this.http.delete(this.baseUrl + 'cart?id=' + this.cart()?.id).subscribe({
+      next: () => {
+        localStorage.removeItem('cart_id');
+        this.cart.set(null);
+      }
+    });
   }
 
   private addOrUpdateItem(items: CartItem[], item: CartItem, quantity: number): CartItem[] {
@@ -132,4 +132,4 @@ this.http.delete(this.baseUrl + 'cart?id' + this.cart()?.id).subscribe({
 
 
 
-} 
+}
