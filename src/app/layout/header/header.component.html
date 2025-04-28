@@ -96,12 +96,20 @@
   </div>
 </header>
 
+<<<<<<< HEAD
 <mat-menu #menu="matMenu">
   @if(accountService.currentUser()){
   <div class="px-4 py-2 text-gray-600 text-sm font-medium border-b">
     {{ accountService.currentUser()?.email }}
   </div>
   }
+=======
+<mat-menu #menu="matMenu" class="px-5">
+  <button mat-menu-item class="px-3" routerLink="/account/profile">
+    <mat-icon>account_circle</mat-icon>
+    My Profile
+  </button>
+>>>>>>> 36f2eb059519ffb554995ba45350dd7c27a5d487
   <button mat-menu-item class="px-3" routerLink="/cart">
     <mat-icon>shopping_cart</mat-icon>
     <span>My cart</span>

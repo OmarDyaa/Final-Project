@@ -6,6 +6,7 @@ import { CartComponent } from './features/cart/cart.component';
 import { CheckoutComponent } from './features/checkout/checkout.component';
 import { LoginComponent } from './features/account/login/login.component';
 import { RegisterComponent } from './features/account/register/register.component';
+import { ProfileComponent } from './features/account/profile/profile.component';
 import { TestErrorComponent } from './features/Test-error/test-error/test-error.component';
 import { NotFoundComponent } from './shared/components/not-found/not-found.component';
 import { ServerErrorComponent } from './shared/components/server-error/server-error.component';
@@ -30,5 +31,10 @@ export const routes: Routes = [
   { path: 'server-error', component: ServerErrorComponent },
   { path: 'account/login', component: LoginComponent },
   { path: 'account/register', component: RegisterComponent },
+  {
+    path: 'account/profile',
+    component: ProfileComponent,
+    canActivate: [authGuard],
+  },
   { path: '**', redirectTo: 'not-found', pathMatch: 'full' },
 ];
