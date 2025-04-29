@@ -9,13 +9,14 @@ import { Order, OrderToCreate } from '../../shared/models/order';
 export class OrderService {
   baseUrl = environment.apiUrl;
   private http = inject(HttpClient);
-
+  orderCompleted = false;
+  
   createOrder(orderToCreate : OrderToCreate){
     return this.http.post<Order>(this.baseUrl+'orders', orderToCreate);
   }
 
-  getOrdersForUser(orderToCreate : OrderToCreate){
-    return this.http.get<Order>(this.baseUrl+'orders');
+  getOrdersForUser(){
+    return this.http.get<Order[]>(this.baseUrl+'orders');
   }
 
   getOrderDetailed(id : number){

@@ -13,8 +13,9 @@ import { Routes } from '@angular/router';
  import { emptyCartGuard } from './core/guards/empty-cart.guard';
  import { CheckoutSuccessComponent } from './features/checkout/checkout-success/checkout-success.component';
  import { ProfileComponent } from './features/account/profile/profile.component';
- import { OrderComponent } from './features/orders/order.component';
  import { OrderDetailedComponent } from './features/orders/order-detailed/order-detailed.component';
+import { OrderComponent } from './features/orders/order.component';
+import { orderCompleteGuard } from './core/guards/order-complete.guard';
  
 
  export const routes: Routes = [
@@ -23,14 +24,15 @@ import { Routes } from '@angular/router';
      {path: 'shop/:id', component: ProductDetailsComponent},
      {path: 'cart', component: CartComponent},
      {path: 'checkout', component: CheckoutComponent, canActivate: [authGuard, emptyCartGuard]},
-     {path: 'checkout/success', component: CheckoutSuccessComponent, canActivate: [authGuard]},
+     {path: 'checkout/success', component: CheckoutSuccessComponent, 
+      canActivate: [authGuard , orderCompleteGuard]},
      {
-      path: 'order',
+      path: 'orders',
       component: OrderComponent,
       canActivate: [authGuard],
     },
     {
-      path: 'order/:id',
+      path: 'orders/:id',
       component: OrderDetailedComponent,
       canActivate: [authGuard],
     },

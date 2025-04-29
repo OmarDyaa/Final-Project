@@ -4,11 +4,13 @@ export interface Order {
     buyerEmail: string
     shippingAddress: ShippingAddress
     deliveryMethod: DeliveryMethod
+    shippingPrice: number
     paymentSummary: PaymentSummary
     orderItems: OrderItem[]
     subtotal: number
     discount: number
     status: number
+    total: number
     paymentIntentId: string
   }
   
@@ -38,10 +40,11 @@ export interface Order {
   }
   
   export interface OrderItem {
-    itemOrdered: ItemOrdered
+    productId: number
+    productName: string
+    pictureUrl: string
     price: number
     quantity: number
-    id: number
   }
   
   export interface ItemOrdered {

@@ -1,7 +1,39 @@
-<div id="initial-splash">
+<!-- <div id="initial-splash">
   <div class="flex items-center justify-center h-screen">
     <div class="flex-col items-center align-middle">
       <img src="../images/logo.png" alt="Logo" />
     </div>
   </div>
+</div> -->
+
+<div class="w-screen h-screen">
+  <div class="flex flex-col items-center justify-center h-full w-full rounder-2xl shadow-xl relative">
+      <div class="absolute inset-0 w-full h-full rounder-2xl bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 animate-gradient"></div>
+      <div class="flex flex-col p-0 rounder-2xl items-center relative">
+        <h1 class="my-6 font-extrabold text-white text-5xl">
+          Welcome to <span class="text-6xl text-purple-500">Clothes</span> Store
+        </h1>
+        <button class="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-cyan-500 hover:to-blue-600 font-semibold text-2xl text-white rounder-2xl px-8 py-4 border-2 border-transparent mt-8 transition-transform transform hover:scale-105" routerLink="/shop">Go to shop</button>
+      </div>
+  </div>
 </div>
+
+<style>
+  @keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient-shift 6s ease infinite;
+  }
+
+  .w-screen {
+    width: 100vw !important;
+    height: 100vh!important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+</style>
