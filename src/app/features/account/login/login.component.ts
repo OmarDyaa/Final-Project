@@ -1,31 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButton, MatIconButton } from '@angular/material/button';
-import { MatCard } from '@angular/material/card';
-import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
-import { MatInput } from '@angular/material/input';
-import { AccountService } from '../../../core/services/account.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { MatIcon } from '@angular/material/icon';
-import { MatCheckbox } from '@angular/material/checkbox';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { AccountService } from '../../../core/services/account.service';
 
 @Component({
   selector: 'app-login',
-  imports: [
-    ReactiveFormsModule,
-    MatCard,
-    MatFormField,
-    MatInput,
-    MatLabel,
-    MatButton,
-    MatIcon,
-    MatIconButton,
-    MatCheckbox,
-    RouterLink,
-    MatProgressSpinner,
-    MatError
-  ],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
@@ -41,20 +21,37 @@ export class LoginComponent {
   constructor() {
     const url = this.activatedRoute.snapshot.queryParams['returnUrl'];
     if (url) this.returnUrl = url;
+
+    // Check if we have stored credentials
+    const rememberedEmail = localStorage.getItem('rememberedEmail');
+    if (rememberedEmail) {
+      this.loginForm.patchValue({
+        email: rememberedEmail,
+        rememberMe: true,
+      });
+    }
   }
 
   loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required],
+    rememberMe: [false],
   });
-  
+
   onSubmit() {
     if (this.loginForm.invalid) return;
-    
+
     this.isLoading = true;
-    this.accountService.login(this.loginForm.value).subscribe({
+    const { email, password, rememberMe } = this.loginForm.value;
+
+    if (rememberMe) {
+      localStorage.setItem('rememberedEmail', email || '');
+    } else {
+      localStorage.removeItem('rememberedEmail');
+    }
+
+    this.accountService.login({ email, password }).subscribe({
       next: () => {
-        this.accountService.getUserInfo().subscribe();
         this.router.navigateByUrl(this.returnUrl);
       },
       error: (error) => {
@@ -63,7 +60,7 @@ export class LoginComponent {
       },
       complete: () => {
         this.isLoading = false;
-      }
+      },
     });
   }
 }
