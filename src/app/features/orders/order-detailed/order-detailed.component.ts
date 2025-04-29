@@ -53,7 +53,6 @@ export class OrderDetailedComponent implements OnInit {
 
     this.orderService.getOrderDetailed(+id).subscribe({
       next: (order) => (this.order = order),
-      complete: () => console.log(typeof loadOderData),
     });
   }
 }
