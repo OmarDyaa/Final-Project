@@ -1,10 +1,11 @@
-
-<section *ngIf="signalrService.orderSignal() as order" class="bg-white py-16">
+<section *ngIf="showOrderSuccess() && getOrderData() as order" class="bg-white py-16">
     <div class="mx-auto max-w-2xl px-4">
-        <h2 class="font-semibold text-2xl mb-2">Thanks for your fake order!</h2>
-        <p class="text-gray-500 mb-8">Your order <span class="font-medium">#{{order.id}}</span>
-            will never be processed as this is a fake shop. we will not notify you once your order has not shipped.
-        </p>
+        <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-6 rounded">
+            <h2 class="font-bold text-2xl mb-2">Thanks for your fake order! 🎉</h2>
+            <p class="text-blue-600 mb-2">Order #{{order.id}} has been successfully not processed!</p>
+            <p class="text-gray-600">This is a demo shop, so we won't actually ship anything or charge your card.</p>
+        </div>
+        
         <div class="space-y-2 rounded-lg border border-gray-100 bg-gray-50 p-6 mb-8">
             <dl class="flex items-center justify-between gap-4">
                 <dt class="font-normal text-gray-500">Date</dt>
@@ -12,7 +13,7 @@
             </dl>
             <dl class="flex items-center justify-between gap-4">
                 <dt class="font-normal text-gray-500">Payment method</dt>
-                <dd class="font-medium text-gray-900 text-end">{{order.paymentSummary}}</dd>
+                <dd class="font-medium text-gray-900 text-end">{{order.paymentSummary | paymentCard}}</dd>
             </dl>
             <dl class="flex items-center justify-between gap-4">
                 <dt class="font-normal text-gray-500">Address</dt>
@@ -22,6 +23,10 @@
                 <dt class="font-normal text-gray-500">Amount</dt>
                 <dd class="font-medium text-gray-900 text-end">{{order.total | currency}}</dd>
             </dl>
+            <dl class="flex items-center justify-between gap-4">
+                <dt class="font-normal text-gray-500">Fake Tracking #</dt>
+                <dd class="font-medium text-gray-900 text-end">NOT-REAL-{{order.id}}{{order.orderDate | date: 'yyMMdd'}}</dd>
+            </dl>
         </div>
         <div class="flex items-center space-x-4">
             <button routerLink="/orders/{{order.id}}" mat-flat-button>View your order</button>
@@ -30,7 +35,7 @@
     </div>
 </section>
 
-<section *ngIf="!signalrService.orderSignal()" class="bg-white py-16">
+<section *ngIf="!showOrderSuccess()" class="bg-white py-16">
     <div class="mx-auto max-w-2xl px-4">
         <h2 class="font-semibold text-2xl mb-2">Order processing... please wait</h2>
 
