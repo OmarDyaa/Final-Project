@@ -18,6 +18,7 @@ import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
  import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { OrderToCreate, ShippingAddress } from '../../shared/models/order';
 import { OrderService } from '../../core/services/order.service';
+import { SignalrService } from '../../core/services/signalr.service';
  
 @Component({
   selector: 'app-checkout',
@@ -40,6 +41,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
    private router = inject(Router);
    private accountService = inject(AccountService);
    private orderService = inject(OrderService);
+   private signalrService = inject(SignalrService);
    cartService = inject(CartService);
    addressElement?: StripeAddressElement;
    paymentElement?: StripePaymentElement;
@@ -121,6 +123,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
        if (this.confirmationToken) {
          const result = await this.stripeService.confirmPayment(this.confirmationToken);
          if(result.paymentIntent?.status === 'succeeded'){
+          // Establish SignalR connection before creating the order
+          this.signalrService.createHubConnection();
+          
           const order = await this.createOrderModer();
           const orderResult = await firstValueFrom(this.orderService.createOrder(order));
           if(orderResult){
