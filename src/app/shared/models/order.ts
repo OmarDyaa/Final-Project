@@ -9,7 +9,7 @@ export interface Order {
     orderItems: OrderItem[]
     subtotal: number
     discount: number
-    status: number
+    status: string
     total: number
     paymentIntentId: string
   }

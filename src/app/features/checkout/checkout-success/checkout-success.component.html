@@ -12,7 +12,7 @@
             </dl>
             <dl class="flex items-center justify-between gap-4">
                 <dt class="font-normal text-gray-500">Payment method</dt>
-                <dd class="font-medium text-gray-900 text-end">{{order.paymentSummary}}</dd>
+                <dd class="font-medium text-gray-900 text-end">{{order.paymentSummary | paymentCard}}</dd>
             </dl>
             <dl class="flex items-center justify-between gap-4">
                 <dt class="font-normal text-gray-500">Address</dt>
