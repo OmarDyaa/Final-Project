@@ -7,8 +7,8 @@ import { Order } from '../../shared/models/order';
 @Injectable({
   providedIn: 'root'
 })
-export class SignalrService {
 
+export class SignalrService {
   hubUrl = environment.hubUrl;
   hubConnection?: HubConnection;
   orderSignal =  signal<Order | null>(null);
