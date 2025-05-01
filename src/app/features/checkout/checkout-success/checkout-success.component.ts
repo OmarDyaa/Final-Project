@@ -137,7 +137,7 @@ export class CheckoutSuccessComponent implements OnInit, OnDestroy {
       subtotal: subtotal,
       discount: 0,
       total: total,
-      status: 1, // Processing
+      status: '1', // Processing
       paymentIntentId: cart?.paymentIntentId || 'fake-payment-intent'
     };
     
