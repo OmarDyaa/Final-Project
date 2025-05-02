@@ -27,7 +27,12 @@ import { CurrencyPipe, JsonPipe } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { OrderToCreate, ShippingAddress } from '../../shared/models/order';
 import { OrderService } from '../../core/services/order.service';
+<<<<<<< HEAD
 
+=======
+import { SignalrService } from '../../core/services/signalr.service';
+ 
+>>>>>>> 9048e18e53659b647998f75cf403e523f921826b
 @Component({
   selector: 'app-checkout',
   standalone: true,
@@ -46,6 +51,7 @@ import { OrderService } from '../../core/services/order.service';
   styleUrl: './checkout.component.scss',
 })
 export class CheckoutComponent implements OnInit, OnDestroy {
+<<<<<<< HEAD
   private stripeService = inject(StripeService);
   private snackbar = inject(SnackbarService);
   private router = inject(Router);
@@ -62,6 +68,87 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }>({ address: false, card: false, delivery: false });
   confirmationToken?: ConfirmationToken;
   loading = false;
+=======
+   private stripeService = inject(StripeService);
+   private snackbar = inject(SnackbarService);
+   private router = inject(Router);
+   private accountService = inject(AccountService);
+   private orderService = inject(OrderService);
+   private signalrService = inject(SignalrService);
+   cartService = inject(CartService);
+   addressElement?: StripeAddressElement;
+   paymentElement?: StripePaymentElement;
+   saveAddress = false;
+   completionStatus = signal<{address: boolean, card: boolean, delivery: boolean}>(
+     {address: false, card: false, delivery: false}
+   );
+   confirmationToken?: ConfirmationToken;
+   loading = false;
+ 
+   async ngOnInit() {
+     try {
+       this.addressElement = await this.stripeService.createAddressElement();
+       this.addressElement.mount('#address-element');
+       this.addressElement.on('change', this.handleAddressChange)
+ 
+       this.paymentElement = await this.stripeService.createPaymentElement();
+       this.paymentElement.mount('#payment-element');
+       this.paymentElement.on('change', this.handlePaymentChange);
+     } catch (error: any) {
+       this.snackbar.error(error.message);
+     }
+   }
+ 
+   handleAddressChange = (event: StripeAddressElementChangeEvent) => {
+     this.completionStatus.update(state => {
+       state.address = event.complete;
+       return state;
+     })
+   }
+ 
+   handlePaymentChange = (event: StripePaymentElementChangeEvent) => {
+     this.completionStatus.update(state => {
+       state.card = event.complete;
+       return state;
+     })
+   }
+ 
+   handleDeliveryChange(event: boolean) {
+     this.completionStatus.update(state => {
+       state.delivery = event;
+       return state;
+     })
+   }
+ 
+   async getConfirmationToken() {
+     try {
+       if (Object.values(this.completionStatus()).every(status => status === true)) {
+         const result = await this.stripeService.createConfirmationToken();
+         if (result.error) throw new Error(result.error.message);
+         this.confirmationToken = result.confirmationToken;
+         console.log(this.confirmationToken);
+       }
+     } catch (error: any) {
+       this.snackbar.error(error.message);
+     }
+ 
+   }
+ 
+   async onStepChange(event: StepperSelectionEvent) {
+     if (event.selectedIndex === 1) {
+       if (this.saveAddress) {
+         const address = await this.getAddressFromStripeAddress() as Address;
+         address && firstValueFrom(this.accountService.updateAddress(address));
+       }
+     }
+     if (event.selectedIndex === 2) {
+       await firstValueFrom(this.stripeService.createOrUpdatePaymentIntent());
+     }
+     if (event.selectedIndex === 3) {
+       await this.getConfirmationToken();
+     }
+   }
+>>>>>>> 9048e18e53659b647998f75cf403e523f921826b
 
   async ngOnInit() {
     try {
@@ -69,6 +156,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       this.addressElement.mount('#address-element');
       this.addressElement.on('change', this.handleAddressChange);
 
+<<<<<<< HEAD
       this.paymentElement = await this.stripeService.createPaymentElement();
       this.paymentElement.mount('#payment-element');
       this.paymentElement.on('change', this.handlePaymentChange);
@@ -145,6 +233,21 @@ export class CheckoutComponent implements OnInit, OnDestroy {
           );
           if (orderResult) {
             this.orderService.orderComplete = true;
+=======
+   async confirmPayment(stepper: MatStepper) {
+     this.loading = true;
+     try {
+       if (this.confirmationToken) {
+         const result = await this.stripeService.confirmPayment(this.confirmationToken);
+         if(result.paymentIntent?.status === 'succeeded'){
+          // Establish SignalR connection before creating the order
+          this.signalrService.createHubConnection();
+          
+          const order = await this.createOrderModer();
+          const orderResult = await firstValueFrom(this.orderService.createOrder(order));
+          if(orderResult){
+            this.orderService.orderCompleted = true;
+>>>>>>> 9048e18e53659b647998f75cf403e523f921826b
             this.cartService.deleteCart();
             this.cartService.selectedDelivery.set(null);
             this.router.navigateByUrl('/checkout/success');
