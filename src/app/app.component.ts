@@ -10,7 +10,7 @@ import { ShopService } from './core/services/shop.service';
 
 @Component({
   selector: 'app-root',
-  imports: [MatSlideToggleModule, HeaderComponent, RouterOutlet, ShopComponent],
+  imports: [MatSlideToggleModule, HeaderComponent, RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

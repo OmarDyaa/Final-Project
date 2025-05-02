@@ -1,0 +1,72 @@
+<div class="p-6">
+  <h2 mat-dialog-title>{{ data.id ? "Edit" : "Add" }} Product</h2>
+
+  <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+    <div mat-dialog-content class="space-y-4">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Description</mat-label>
+        <textarea
+          matInput
+          formControlName="description"
+          rows="3"
+          required
+        ></textarea>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Price</mat-label>
+        <input matInput type="number" formControlName="price" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Brand</mat-label>
+        <mat-select formControlName="brand" required>
+          @for (brand of shopService.brands; track brand) {
+          <mat-option [value]="brand">{{ brand }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Type</mat-label>
+        <mat-select formControlName="type" required>
+          @for (type of shopService.types; track type) {
+          <mat-option [value]="type">{{ type }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Quantity in Stock</mat-label>
+        <input
+          matInput
+          type="number"
+          formControlName="quantityInStock"
+          required
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Picture URL</mat-label>
+        <input matInput formControlName="pictureUrl" required />
+      </mat-form-field>
+    </div>
+
+    <div mat-dialog-actions align="end">
+      <button mat-button [mat-dialog-close]>Cancel</button>
+      <button
+        mat-flat-button
+        color="primary"
+        type="submit"
+        [disabled]="!productForm.valid"
+      >
+        {{ data.id ? "Update" : "Create" }}
+      </button>
+    </div>
+  </form>
+</div>

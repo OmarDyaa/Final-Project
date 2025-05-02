@@ -2,16 +2,15 @@ import { Component, inject, OnInit } from '@angular/core';
 import { OrderService } from '../../core/services/order.service';
 import { Order } from '../../shared/models/order';
 import { RouterLink } from '@angular/router';
-import { CurrencyPipe, DatePipe } from '@angular/common';
+import { CurrencyPipe, DatePipe, NgClass, NgIf } from '@angular/common';
+import { NgModel } from '@angular/forms';
 
 @Component({
   selector: 'app-order',
-  imports: [RouterLink,
-    DatePipe,
-    CurrencyPipe
-  ],
+  standalone: true,
+  imports: [RouterLink, DatePipe, CurrencyPipe, NgClass],
   templateUrl: './order.component.html',
-  styleUrl: './order.component.scss'
+  styleUrl: './order.component.scss',
 })
 export class OrderComponent implements OnInit {
   private orderService = inject(OrderService);
@@ -19,7 +18,7 @@ export class OrderComponent implements OnInit {
 
   ngOnInit(): void {
     this.orderService.getOrdersForUser().subscribe({
-      next: orders => this.orders = orders
-    })
+      next: (orders) => (this.orders = orders),
+    });
   }
 }

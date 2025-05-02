@@ -16,7 +16,7 @@ import { ProfileComponent } from './features/account/profile/profile.component';
 import { OrderDetailedComponent } from './features/orders/order-detailed/order-detailed.component';
 import { OrderComponent } from './features/orders/order.component';
 import { orderCompleteGuard } from './core/guards/order-complete.guard';
-import { AdminComponent } from './features/admin/admin/admin.component';
+import { AdminComponent } from './features/admin/admin.component';
 import { adminGuard } from './core/guards/admin.guard';
 // import { adminGuard } from './core/guards/admin.guard';
 

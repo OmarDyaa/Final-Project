@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ShopService } from '../../../core/services/shop.service';
 import { MatDivider } from '@angular/material/divider';
 import { MatListOption, MatSelectionList } from '@angular/material/list';
@@ -7,7 +7,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-filters-dailog',
+  selector: 'app-filters-dialog',
+  standalone: true,
   imports: [
     MatDivider,
     MatSelectionList,
@@ -15,36 +16,19 @@ import { FormsModule } from '@angular/forms';
     MatButton,
     FormsModule,
   ],
-  templateUrl: './filters-dailog.component.html',
-  styleUrl: './filters-dailog.component.scss',
+  templateUrl: './filters-dialog.component.html',
+  styleUrl: './filters-dialog.component.scss',
 })
-export class FiltersDailogComponent implements OnInit {
+export class FiltersDialogComponent {
   shopService = inject(ShopService);
-  private dailogRef = inject(MatDialogRef<FiltersDailogComponent>);
+  private dialogRef = inject(MatDialogRef<FiltersDialogComponent>);
   data = inject(MAT_DIALOG_DATA);
+
   selectedBrands: string[] = this.data.selectedBrands;
   selectedTypes: string[] = this.data.selectedTypes;
-  availableBrands: string[] = [];
-  availableTypes: string[] = [];
-
-  ngOnInit() {
-    // Get brands
-    this.shopService.getBrands().subscribe({
-      next: (brands) => {
-        this.availableBrands = brands;
-      },
-    });
-
-    // Get types
-    this.shopService.getTypes().subscribe({
-      next: (types) => {
-        this.availableTypes = types;
-      },
-    });
-  }
 
   applyFilters() {
-    this.dailogRef.close({
+    this.dialogRef.close({
       selectedBrands: this.selectedBrands,
       selectedTypes: this.selectedTypes,
     });

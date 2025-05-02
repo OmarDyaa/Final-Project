@@ -1,35 +1,36 @@
 import { Component, inject, OnDestroy } from '@angular/core';
-import { SignalrService } from '../../../core/services/signalr.service';
 import { MatButton } from '@angular/material/button';
-import { Router, RouterLink } from '@angular/router';
-import { MatProgressBar } from '@angular/material/progress-bar';
-import { AddressPipe } from '../../../shared/pipes/address.pipe';
-import { CurrencyPipe, DatePipe, NgIf } from '@angular/common';
-import { PaymentCardPipe } from '../../../shared/pipes/payment-card.pipe';
+import { RouterLink } from '@angular/router';
+import { SignalrService } from '../../../core/services/signalr.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CurrencyPipe, DatePipe, NgIf } from '@angular/common';
+import { AddressPipe } from '../../../shared/pipes/address.pipe';
+import { PaymentCardPipe } from '../../../shared/pipes/payment-card.pipe';
 import { OrderService } from '../../../core/services/order.service';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-checkout-success',
+  standalone: true,
   imports: [
     MatButton,
     RouterLink,
     MatProgressSpinnerModule,
-    DatePipe,
+    MatIcon,
     AddressPipe,
     CurrencyPipe,
     PaymentCardPipe,
-    NgIf
+    NgIf,
   ],
   templateUrl: './checkout-success.component.html',
-  styleUrl: './checkout-success.component.scss'
+  styleUrl: './checkout-success.component.scss',
 })
-export class CheckoutSuccessComponent implements OnDestroy{
+export class CheckoutSuccessComponent implements OnDestroy {
   signalrService = inject(SignalrService);
   private orderService = inject(OrderService);
-  
+
   ngOnDestroy(): void {
-    this.orderService.orderCompleted = false;
+    this.orderService.orderComplete = false;
     this.signalrService.orderSignal.set(null);
   }
 }

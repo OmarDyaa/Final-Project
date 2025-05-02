@@ -1,4 +1,4 @@
-import { Injectable, signal, Signal } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import {
   HubConnection,
@@ -32,7 +32,7 @@ export class SignalrService {
 
   stopHubConnection() {
     if (this.hubConnection?.state === HubConnectionState.Connected) {
-      this.hubConnection?.stop().catch((error) => console.log(error));
+      this.hubConnection.stop().catch((error) => console.log(error));
     }
   }
 }

@@ -1,156 +1,115 @@
-<header class="border-b shadow-md p-3 w-full fixed top-0 z-50 bg-white">
+<header
+  class="border-b shadow-md p-3 w-full max-h-20 fixed top-0 z-50 bg-white"
+>
   <div
-    class="flex flex-col md:flex-row md:items-center justify-between max-w-screen-2xl mx-auto"
+    class="flex align-middle items-center justify-between max-w-screen-2xl mx-auto"
   >
-    <div class="flex justify-between items-center">
-      <img
-        routerLink="/"
-        src="/images/logo.png"
-        alt="app logo"
-        class="max-h-14 cursor-pointer transition-transform hover:scale-105"
-      />
-      <button mat-icon-button class="md:hidden" (click)="toggleMobileMenu()">
-        <mat-icon>{{ isMobileMenuOpen ? "close" : "menu" }}</mat-icon>
+    <ng-container *ngIf="true">
+      <ng-container *appIsAdmin>
+        <img src="/images/logo.png" alt="app logo" class="max-h-16" />
+      </ng-container>
+      <ng-container *appIsUser>
+        <img
+          routerLink="/"
+          src="/images/logo.png"
+          alt="app logo"
+          class="max-h-16 cursor-pointer"
+        />
+      </ng-container>
+      <ng-container *appIsLoggedOut>
+        <img
+          routerLink="/"
+          src="/images/logo.png"
+          alt="app logo"
+          class="max-h-16 cursor-pointer"
+        />
+      </ng-container>
+    </ng-container>
+
+    <div class="flex items-center gap-3">
+      <!-- Cart and user menu for all screen sizes -->
+      <ng-container *ngIf="true">
+        <ng-container *appIsUser>
+          <a
+            routerLink="/cart"
+            routerLinkActive="active"
+            matBadge="{{ cartService.itemCount() }}"
+            matBadgeSize="large"
+            class="custom-badge mt-2 mr-2"
+          >
+            <mat-icon>shopping_cart</mat-icon>
+          </a>
+        </ng-container>
+        <ng-container *appIsLoggedOut>
+          <a
+            routerLink="/cart"
+            routerLinkActive="active"
+            matBadgeSize="large"
+            class="custom-badge mt-2 mr-2"
+          >
+            <mat-icon>shopping_cart</mat-icon>
+          </a>
+        </ng-container>
+      </ng-container>
+
+      @if (accountService.currentUser()) {
+      <!-- <span>{{ accountService.currentUser()?.email }}</span> -->
+      <button mat-button matBadgeSize="large" [matMenuTriggerFor]="menu">
+        <mat-icon>menu</mat-icon>
       </button>
-    </div>
-
-    <nav class="hidden md:flex gap-8 my-2 font-medium tracking-wide">
-      <a
-        routerLink="/"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        class="nav-link"
-        >HOME</a
-      >
-      <a routerLink="/shop" routerLinkActive="active" class="nav-link">SHOP</a>
-      <a routerLink="/test-error" routerLinkActive="active" class="nav-link"
-        >ERRORS</a
-      >
-      <a
-        *appIsAdmin
-        routerLink="/admin"
-        routerLinkActive="active"
-        class="nav-link"
-        >ADMIN</a
-      >
-
-      <a class="nav-link">CONTACT US</a>
-    </nav>
-
-    <!-- Mobile navigation menu -->
-    <nav
-      *ngIf="isMobileMenuOpen"
-      class="md:hidden flex flex-col gap-4 py-3 text-center font-medium animate-slideDown"
-    >
-      <a
-        routerLink="/"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        class="nav-link py-2"
-        (click)="toggleMobileMenu()"
-        >HOME</a
-      >
-      <a
-        routerLink="/shop"
-        routerLinkActive="active"
-        class="nav-link py-2"
-        (click)="toggleMobileMenu()"
-        >SHOP</a
-      >
-      <a
-        routerLink="/test-error"
-        routerLinkActive="active"
-        class="nav-link py-2"
-        (click)="toggleMobileMenu()"
-        >ERRORS</a
-      >
-      <a class="nav-link py-2" (click)="toggleMobileMenu()">CONTACT US</a>
-    </nav>
-
-    <div class="hidden md:flex gap-3 items-center">
-      <a
-        routerLink="/cart"
-        routerLinkActive="active"
-        matBadge="{{ cartservice.itemsCount() }}"
-        matBadgeSize="large"
-        class="custom-badge mt-1 mr-2 hover:text-primary transition-colors"
-      >
-        <mat-icon>shopping_cart</mat-icon>
-      </a>
-      @if(accountService.currentUser()){
-      <span class="text-sm font-medium truncate max-w-[120px]">{{
-        accountService.currentUser()?.email
-      }}</span>
-      <mat-icon class="cursor-pointer" [mat-menu-trigger-for]="menu"
-        >arrow_drop_down</mat-icon
-      >
-      }@else {
-      <button routerLink="/account/login" mat-stroked-button class="login-btn">
-        Login
-      </button>
-      <button
-        routerLink="/account/register"
-        mat-stroked-button
-        class="register-btn"
-      >
-        Register
-      </button>
-      }
-    </div>
-
-    <!-- Mobile user actions -->
-    <div
-      class="md:hidden flex justify-end items-center gap-3 mt-2"
-      *ngIf="!isMobileMenuOpen"
-    >
-      <a
-        routerLink="/cart"
-        routerLinkActive="active"
-        matBadge="{{ cartservice.itemsCount() }}"
-        matBadgeSize="small"
-        class="custom-badge"
-      >
-        <mat-icon>shopping_cart</mat-icon>
-      </a>
-      @if(accountService.currentUser()){
-      <mat-icon [mat-menu-trigger-for]="menu">account_circle</mat-icon>
-      }@else {
-      <button routerLink="/account/login" mat-icon-button>
-        <mat-icon>login</mat-icon>
-      </button>
+      } @else {
+      <div class="hidden lg:flex gap-3">
+        <button routerLink="/account/login" mat-stroked-button>Login</button>
+        <button routerLink="/account/register" mat-stroked-button>
+          Register
+        </button>
+      </div>
       }
     </div>
   </div>
 </header>
 
-<mat-menu #menu="matMenu">
-  @if(accountService.currentUser()){
-  <div class="px-4 py-2 text-gray-600 text-sm font-medium border-b">
-    {{ accountService.currentUser()?.email }}
-  </div>
-  <button mat-menu-item class="px-3" routerLink="/account/profile">
-    <mat-icon>account_circle</mat-icon>
-    My Profile
-  </button>
-  <button mat-menu-item class="px-3" routerLink="/cart">
-    <mat-icon>shopping_cart</mat-icon>
-    <span>My cart</span>
-  </button>
-  <button mat-menu-item class="px-3" routerLink="/orders">
-    <mat-icon>history</mat-icon>
-    <span>My orders</span>
-  </button>
-  <mat-divider></mat-divider>
-  <button mat-menu-item class="px-3" (click)="logout()">
-    <mat-icon>logout</mat-icon>
-    <span>Logout</span>
-  </button>
-  }
-</mat-menu>
-
-@if(busyService.loading){
+@if (busyService.loading) {
 <mat-progress-bar
   mode="indeterminate"
-  class="fixed top-16 z-50"
+  class="fixed top-20 z-50"
 ></mat-progress-bar>
 }
+
+<mat-menu #menu="matMenu" class="px-5">
+  <a mat-menu-item routerLink="/account/profile">
+    <mat-icon>
+      <span class="material-symbols-outlined"> account_circle </span>
+    </mat-icon>
+    <span>{{ accountService.currentUser()?.email }}</span>
+  </a>
+  <a mat-menu-item *appIsUser routerLink="/">
+    <mat-icon>home</mat-icon>
+    <span>Home</span>
+  </a>
+  <a mat-menu-item *appIsUser routerLink="/shop">
+    <mat-icon>store</mat-icon>
+    <span>Shop</span>
+  </a>
+  <button *appIsUser mat-menu-item class="px-3" routerLink="/cart">
+    <mat-icon>shopping_cart</mat-icon>
+    My cart
+  </button>
+  <button *appIsUser mat-menu-item class="px-3" routerLink="/orders">
+    <mat-icon>history</mat-icon>
+    My orders
+  </button>
+  <mat-divider *appIsUser></mat-divider>
+  <a mat-menu-item *appIsAdmin routerLink="/test-error">
+    <mat-icon>error</mat-icon>
+    <span>Errors</span>
+  </a>
+  <a mat-menu-item *appIsAdmin routerLink="/admin">
+    <mat-icon>admin_panel_settings</mat-icon>
+    <span>Admin</span>
+  </a>
+  <button mat-menu-item class="px-3" (click)="logout()">
+    <mat-icon>logout</mat-icon>
+    Logout
+  </button>
+</mat-menu>
