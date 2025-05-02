@@ -1,28 +1,51 @@
-<div class="mx-auto" mt-32>
-    <h2 class="font-semibold text-2xl mb-6 text-center">
-        <div class="flex flex-col">
-            <div class="w-full">
-                <table class="min-w-full divide-y divide-gray-900 cursor-pointer">
-                    <thead class="bg-gray-50">
-                        <tr class="uppercase text-gray-900 text-sm">
-                            <th class="text-center px-6 py-3">Order</th>
-                            <th class="text-left">Date</th>
-                            <th class="text-left">Total</th>
-                            <th class="text-left">Status</th>                        
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200 text-sm">
-                        @for( order of orders; track order.id){
-                            <tr routerLink="/orders/{{order.id}}" class="hover:bg-gray-100">
-                                <th class="px-6 py-3"># {{order.id}}</th>
-                                <td class="text-left">{{order.orderDate | date: 'medium'}}</td>
-                                <td class="text-left">{{order.total | currency}}</td>
-                                <td class="text-left">{{order.status}}</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+<div class="mx-auto mt-32 px-4">
+  <h2 class="font-semibold text-xl sm:text-2xl mb-6 text-center">My orders</h2>
+  <div class="flex flex-col">
+    <div class="overflow-x-auto">
+      <div class="inline-block min-w-full">
+        <div class="overflow-hidden rounded-lg shadow">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr class="uppercase text-gray-600 text-xs sm:text-sm">
+                <th class="text-center px-4 sm:px-6 py-3">Order</th>
+                <th class="text-left px-4 sm:px-6 py-3 hidden sm:table-cell">
+                  Date
+                </th>
+                <th class="text-left px-4 sm:px-6 py-3">Total</th>
+                <th class="text-left px-4 sm:px-6 py-3">Status</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              @for (order of orders; track order.id) {
+              <tr
+                routerLink="/orders/{{ order.id }}"
+                class="hover:bg-gray-100 cursor-pointer"
+              >
+                <td class="px-4 sm:px-6 py-3 text-center"># {{ order.id }}</td>
+                <td class="px-4 sm:px-6 py-3 hidden sm:table-cell">
+                  {{ order.orderDate | date : "medium" }}
+                </td>
+                <td class="px-4 sm:px-6 py-3">{{ order.total | currency }}</td>
+                <td class="px-4 sm:px-6 py-3">
+                  <span
+                    class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium"
+                    [ngClass]="{
+                      'bg-green-100 text-green-800':
+                        order.status === 'Completed',
+                      'bg-yellow-100 text-yellow-800':
+                        order.status === 'Pending',
+                      'bg-red-100 text-red-800': order.status === 'Cancelled'
+                    }"
+                  >
+                    {{ order.status }}
+                  </span>
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
         </div>
-    </h2>
+      </div>
+    </div>
+  </div>
 </div>

@@ -1,47 +1,46 @@
 import { Component, inject } from '@angular/core';
 import { MatBadge } from '@angular/material/badge';
 import { MatButton } from '@angular/material/button';
-import { MatDivider } from '@angular/material/divider';
 import { MatIcon } from '@angular/material/icon';
-import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
-import { MatProgressBar } from '@angular/material/progress-bar';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { BusyService } from '../../core/services/busy.service';
-import { AccountService } from '../../core/services/account.service';
+import { MatProgressBar } from '@angular/material/progress-bar';
 import { CartService } from '../../core/services/cart.service';
-import { NgIf } from '@angular/common';
+import { AccountService } from '../../core/services/account.service';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { MatDivider } from '@angular/material/divider';
 import { IsAdminDirective } from '../../shared/directives/is-admin.directive';
+import { IsUserDirective } from '../../shared/directives/is-user.directive';
+import { NgIf } from '@angular/common';
+import { IsLoggedOutDirective } from '../../shared/directives/is-loggedout.directive';
 
 @Component({
   selector: 'app-header',
+  standalone: true,
   imports: [
     MatIcon,
     MatButton,
     MatBadge,
     RouterLink,
     RouterLinkActive,
-    MatMenu,
-    MatMenuTrigger,
-    MatMenuItem,
-    MatDivider,
     MatProgressBar,
-    NgIf,
+    MatMenuTrigger,
+    MatMenu,
+    MatDivider,
+    MatMenuItem,
     IsAdminDirective,
+    IsUserDirective,
+    NgIf,
+    IsLoggedOutDirective,
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
   busyService = inject(BusyService);
-  cartservice = inject(CartService);
+  cartService = inject(CartService);
   accountService = inject(AccountService);
   private router = inject(Router);
-
-  isMobileMenuOpen = false;
-
-  toggleMobileMenu() {
-    this.isMobileMenuOpen = !this.isMobileMenuOpen;
-  }
 
   logout() {
     this.accountService.logout().subscribe({

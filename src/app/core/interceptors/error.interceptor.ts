@@ -1,4 +1,8 @@
-import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
+import {
+  HttpErrorResponse,
+  HttpEvent,
+  HttpInterceptorFn,
+} from '@angular/common/http';
 import { inject } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
@@ -27,10 +31,10 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         snackbar.error(err.error.title || err.error);
       }
       if (err.status === 403) {
-        snackbar.error('Forbedden');
+        snackbar.error('Forbidden');
       }
       if (err.status === 404) {
-        router.navigateByUrl('/not-fount');
+        router.navigateByUrl('/not-found');
       }
       if (err.status === 500) {
         const navigationExtras: NavigationExtras = {

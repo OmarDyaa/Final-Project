@@ -1,23 +1,55 @@
 @if (product) {
 <mat-card
   appearance="raised"
-  class="shadow-lg product-card"
   routerLink="/shop/{{ product.id }}"
+  class="product-card"
 >
-  <img
-    src="{{ product.pictureUrl }}"
-    alt="{{ product.name }}"
-    class="w-40 h-32 object-fill"
-  />
-  <mat-card-content class="mt-2">
-    <h2 class="text-sm font-semibold uppercase">{{ product.name }}</h2>
-    <p class="font-light">{{ product.price | currency }}</p>
+  <div class="relative group">
+    <img
+      class="w-full h-48 rounded-xl object-fill transition-transform duration-300 group-hover:scale-105"
+      mat-card-image
+      src="{{ product.pictureUrl }}"
+      alt="Product image"
+    />
+    <div class="absolute right-2 my-4">
+      <button
+        mat-mini-fab
+        color="primary"
+        [disabled]="product.quantityInStock <= 0"
+        class="transform hover:scale-110"
+        (click)="$event.stopPropagation(); cartService.addItemToCart(product)"
+      >
+        <mat-icon>add_shopping_cart</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <mat-card-content class="p-4 flex flex-col h-full">
+    <div class="flex-grow">
+      <h2
+        class="text-sm sm:text-base font-semibold text-gray-800 line-clamp-2 hover:text-primary transition-colors"
+      >
+        {{ product.name }}
+      </h2>
+      <p class="text-lg font-light line-clamp-2">{{ product.description }}</p>
+    </div>
+
+    <div class="mt-4 pt-2 border-t border-gray-100">
+      <div class="flex items-center justify-between">
+        <p class="text-lg font-semibold text-primary">
+          {{ product.price | currency }}
+        </p>
+        <div class="text-sm">
+          <span
+            [class.text-green-600]="product.quantityInStock > 0"
+            [class.text-red-500]="!product.quantityInStock"
+            [class.line-through]="!product.quantityInStock"
+          >
+            {{ product.quantityInStock > 0 ? "In Stock" : "Out of Stock" }}
+          </span>
+        </div>
+      </div>
+    </div>
   </mat-card-content>
-  <mat-card-actions (click)="$event.stopPropagation()">
-    <button mat-stroked-button class="w-full" (click)="cartservice.addItemToCart(product)">
-      <mat-icon>add_shopping_cart</mat-icon>
-      Add to Cart
-    </button>
-  </mat-card-actions>
 </mat-card>
 }

@@ -5,12 +5,11 @@ import { OrderService } from '../services/order.service';
 export const orderCompleteGuard: CanActivateFn = (route, state) => {
   const orderService = inject(OrderService);
   const router = inject(Router);
-  
-  if(orderService.orderCompleted) {
+
+  if (orderService.orderComplete) {
     return true;
-  }else {
+  } else {
     router.navigateByUrl('/shop');
     return false;
   }
-
 };

@@ -5,26 +5,17 @@
     <div class="w-1/2">
       <h4 class="font-semibold text-xl text-primary">Brands</h4>
       <mat-selection-list [(ngModel)]="selectedBrands" [multiple]="true">
-        @for (brand of availableBrands; track brand) {
-        <mat-list-option
-          [value]="brand"
-          [selected]="selectedBrands.includes(brand)"
-        >
-          {{ brand }}
-        </mat-list-option>
+        @for (brand of shopService.brands; track $index) {
+        <mat-list-option [value]="brand">{{ brand }}</mat-list-option>
         }
       </mat-selection-list>
     </div>
+
     <div class="w-1/2">
       <h4 class="font-semibold text-xl text-primary">Types</h4>
       <mat-selection-list [(ngModel)]="selectedTypes" [multiple]="true">
-        @for (type of availableTypes; track type) {
-        <mat-list-option
-          [value]="type"
-          [selected]="selectedTypes.includes(type)"
-        >
-          {{ type }}
-        </mat-list-option>
+        @for (type of shopService.types; track $index) {
+        <mat-list-option [value]="type">{{ type }}</mat-list-option>
         }
       </mat-selection-list>
     </div>

@@ -1,75 +1,26 @@
-<div class="login-container">
-  <div class="form-container">
-    <div class="login-form-box">
-      <div class="logo-container">
-        <img src="/images/logo.png" alt="Logo" class="logo" />
-      </div>
-
-      <h1 class="title">Welcome Back</h1>
-      <p class="subtitle">Sign in to your account</p>
-
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-        <div class="form-group">
-          <label for="email">Email Address*</label>
-          <input
-            id="email"
-            formControlName="email"
-            type="email"
-            placeholder="name@example.com"
-            class="form-input"
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="password">Password*</label>
-          <input
-            id="password"
-            formControlName="password"
-            type="password"
-            placeholder="Password"
-            class="form-input"
-          />
-        </div>
-
-        <div class="remember-forgot">
-          <div class="remember">
-            <input
-              type="checkbox"
-              id="remember"
-              class="remember-checkbox"
-              formControlName="rememberMe"
-            />
-            <label for="remember">Remember me</label>
-          </div>
-          <a href="#" class="forgot-link">Forgot password?</a>
-        </div>
-
-        <button
-          type="submit"
-          class="sign-in-button"
-          [disabled]="loginForm.invalid || isLoading"
-        >
-          @if(isLoading) {
-          <div class="spinner"></div>
-          Signing in... } @else { Sign in }
-        </button>
-
-        <div class="signup-prompt">
-          Don't have an account?
-          <a routerLink="/account/register" class="signup-link">Sign up</a>
-        </div>
-      </form>
+<mat-card class="max-w-lg mx-auto mt-32 p-8 bg-white">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div class="text-center mb-6">
+      <h1 class="text-3xl font-semibold text-primary">Login</h1>
     </div>
-  </div>
-
-  <div class="hero-container">
-    <img src="/images/logPage.jpg" alt="Login background" class="hero-image" />
-    <div class="overlay"></div>
-    <div class="hero-content">
-      <h2>Shop with Confidence</h2>
-      <p>
-        Sign in to access your account and continue your shopping experience
-      </p>
-    </div>
-  </div>
-</div>
+    <mat-form-field appearance="outline" class="w-full mb-4">
+      <mat-label>Email address</mat-label>
+      <input
+        formControlName="email"
+        type="email"
+        placeholder="name@example.com"
+        matInput
+      />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="w-full mb-4">
+      <mat-label>Password</mat-label>
+      <input
+        formControlName="password"
+        type="password"
+        placeholder="Password"
+        matInput
+      />
+    </mat-form-field>
+    <button mat-flat-button type="submit" class="w-full py-2">Sign in</button>
+  </form>
+</mat-card>

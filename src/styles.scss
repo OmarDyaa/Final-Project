@@ -1,8 +1,8 @@
 @use "@angular/material" as mat;
 
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 $customTheme: mat.define-theme();
 
@@ -10,39 +10,24 @@ $customTheme: mat.define-theme();
 
 .custom-theme {
   @include mat.all-component-themes($customTheme);
-}
 
-/* Material Button Styles with Tailwind */
-.mdc-button,
-.mat-mdc-button,
-.mat-mdc-raised-button,
-.mat-mdc-outlined-button,
-.mat-mdc-flat-button {
-  @apply rounded-md text-white px-4 py-2 hover:bg-blue-600 transition-colors duration-100 !important;
-}
-
-.mat-mdc-outlined-button {
-  @apply bg-transparent border-2 border-blue-500 text-blue-500 hover:bg-blue-50 !important;
-}
-
-.mat-mdc-flat-button {
-  @apply bg-gray-100 text-gray-800 hover:bg-gray-200 !important;
-}
-
-body,
-html {
-  overflow-x: hidden;
-  background-color: white;
+  // override the button styles
+  .mdc-button,
+  .mdc-raised-button,
+  .mdc-stroked-button,
+  .mdc-flat-button {
+    @apply rounded-md;
+  }
 }
 
 .container {
-  margin-left: 20px;
-  margin-right: 20px;
-  max-width: 1536px;
+  @apply mx-auto max-w-screen-2xl;
 }
+
 .text-primary {
   color: #7d00fa;
 }
+
 button.match-input-height {
   height: var(--mat-form-field-container-height) !important;
 }
@@ -53,12 +38,12 @@ button.match-input-height {
 
 .mat-mdc-snack-bar-container.snack-error {
   --mdc-snackbar-container-color: red;
-  --mdc-snack-bar-button-color: rgb(255, 255, 255);
-  --mdc-snackbar-supporting-text-color: rgb(255, 255, 255);
+  --mat-snack-bar-button-color: #fff;
+  --mdc-snackbar-supporting-text-color: #fff;
 }
 
 .mat-mdc-snack-bar-container.snack-success {
   --mdc-snackbar-container-color: green;
-  --mdc-snack-bar-button-color: rgb(255, 255, 255);
-  --mdc-snackbar-supporting-text-color: rgb(255, 255, 255);
+  --mat-snack-bar-button-color: #fff;
+  --mdc-snackbar-supporting-text-color: #fff;
 }

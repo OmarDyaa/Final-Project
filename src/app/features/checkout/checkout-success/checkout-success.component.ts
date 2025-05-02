@@ -1,35 +1,34 @@
-import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
-import { SignalrService } from '../../../core/services/signalr.service';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { MatButton } from '@angular/material/button';
-import { Router, RouterLink } from '@angular/router';
-import { AddressPipe } from '../../../shared/pipes/address.pipe';
-import { CurrencyPipe, DatePipe, NgIf } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { SignalrService } from '../../../core/services/signalr.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { OrderService } from '../../../core/services/order.service';
-import { DeliveryMethod, Order, PaymentSummary } from '../../../shared/models/order';
+import { CurrencyPipe, DatePipe, NgIf } from '@angular/common';
+import { AddressPipe } from '../../../shared/pipes/address.pipe';
 import { PaymentCardPipe } from '../../../shared/pipes/payment-card.pipe';
-import { CartService } from '../../../core/services/cart.service';
-import { AccountService } from '../../../core/services/account.service';
-import { firstValueFrom } from 'rxjs';
+import { OrderService } from '../../../core/services/order.service';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-checkout-success',
+  standalone: true,
   imports: [
     MatButton,
     RouterLink,
     MatProgressSpinnerModule,
-    DatePipe,
+    MatIcon,
     AddressPipe,
     CurrencyPipe,
     PaymentCardPipe,
-    NgIf
+    NgIf,
   ],
   templateUrl: './checkout-success.component.html',
-  styleUrl: './checkout-success.component.scss'
+  styleUrl: './checkout-success.component.scss',
 })
-export class CheckoutSuccessComponent implements OnInit, OnDestroy {
+export class CheckoutSuccessComponent implements OnDestroy {
   signalrService = inject(SignalrService);
   private orderService = inject(OrderService);
+<<<<<<< HEAD
   private cartService = inject(CartService);
   private accountService = inject(AccountService);
   private router = inject(Router);
@@ -150,8 +149,11 @@ export class CheckoutSuccessComponent implements OnInit, OnDestroy {
     return this.signalrService.orderSignal() || this.localOrderSignal();
   }
   
+=======
+
+>>>>>>> 2b65fae3eb7829ab2c9af097078a08967252916b
   ngOnDestroy(): void {
-    this.orderService.orderCompleted = false;
+    this.orderService.orderComplete = false;
     this.signalrService.orderSignal.set(null);
     this.signalrService.stopHubConnection();
   }

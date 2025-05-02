@@ -1,10 +1,10 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ShopService } from '../../core/services/shop.service';
 import { Product } from '../../shared/models/product';
 import { MatCard } from '@angular/material/card';
 import { ProductItemComponent } from './product-item/product-item.component';
 import { MatDialog } from '@angular/material/dialog';
-import { FiltersDailogComponent } from './filters-dailog/filters-dailog.component';
+
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
@@ -15,64 +15,71 @@ import {
 } from '@angular/material/list';
 import { ShopParams } from '../../shared/models/shopParams';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { FormsModule } from '@angular/forms';
 import { Pagination } from '../../shared/models/pagination';
+import { FormsModule } from '@angular/forms';
+import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state.component';
+import { FiltersDialogComponent } from './filters-dailog/filters-dialog.component';
 
 @Component({
   selector: 'app-shop',
+  standalone: true,
   imports: [
     ProductItemComponent,
     MatButton,
     MatIcon,
     MatMenu,
-    MatCard,
     MatSelectionList,
     MatListOption,
     MatMenuTrigger,
     MatPaginator,
     FormsModule,
+    EmptyStateComponent,
   ],
   templateUrl: './shop.component.html',
   styleUrl: './shop.component.scss',
 })
-export class ShopComponent implements OnInit {
-  title = 'Store';
+export class ShopComponent {
   private shopService = inject(ShopService);
-  private dailogService = inject(MatDialog);
+  private dialogService = inject(MatDialog);
   products?: Pagination<Product>;
-  sortOption = [
+  sortOptions = [
     { name: 'Alphabetical', value: 'name' },
     { name: 'Price: Low-High', value: 'priceAsc' },
     { name: 'Price: High-Low', value: 'priceDesc' },
   ];
-
   shopParams = new ShopParams();
   pageSizeOptions = [5, 10, 15, 20];
-  ngOnInit(): void {
-    this.initializeShop();
+
+  ngOnInit() {
+    this.initialiseShop();
   }
 
-  initializeShop() {
-    this.shopService.getBrands();
+  initialiseShop() {
     this.shopService.getTypes();
+    this.shopService.getBrands();
+    this.getProducts();
+  }
+
+  resetFilters() {
+    this.shopParams = new ShopParams();
     this.getProducts();
   }
 
   getProducts() {
     this.shopService.getProducts(this.shopParams).subscribe({
       next: (response) => (this.products = response),
-      error: (error) => console.log(error),
+      error: (error) => console.error(error),
     });
-  }
-
-  handelPageEvent(e: PageEvent) {
-    this.shopParams.pageNumber = e.pageIndex + 1;
-    this.shopParams.pageSize = e.pageSize;
-    this.getProducts();
   }
 
   onSearchChange() {
     this.shopParams.pageNumber = 1;
+    this.getProducts();
+  }
+
+  handlePageEvent(event: PageEvent) {
+    this.shopParams.pageNumber = event.pageIndex + 1;
+    this.shopParams.pageSize = event.pageSize;
     this.getProducts();
   }
 
@@ -85,21 +92,20 @@ export class ShopComponent implements OnInit {
     }
   }
 
-  openFilterDialog() {
-    const dailogRef = this.dailogService.open(FiltersDailogComponent, {
+  openFiltersDialog() {
+    const dialogRef = this.dialogService.open(FiltersDialogComponent, {
       minWidth: '500px',
       data: {
         selectedBrands: this.shopParams.brands,
         selectedTypes: this.shopParams.types,
       },
     });
-    dailogRef.afterClosed().subscribe({
+    dialogRef.afterClosed().subscribe({
       next: (result) => {
         if (result) {
           this.shopParams.brands = result.selectedBrands;
           this.shopParams.types = result.selectedTypes;
           this.shopParams.pageNumber = 1;
-          // Applay Filters
           this.getProducts();
         }
       },

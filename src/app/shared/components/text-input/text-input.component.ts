@@ -1,4 +1,4 @@
-import { Component, Input, input, Self } from '@angular/core';
+import { Component, Input, Self } from '@angular/core';
 import {
   ControlValueAccessor,
   FormControl,
@@ -10,6 +10,7 @@ import { MatInput } from '@angular/material/input';
 
 @Component({
   selector: 'app-text-input',
+  standalone: true,
   imports: [ReactiveFormsModule, MatFormField, MatInput, MatError, MatLabel],
   templateUrl: './text-input.component.html',
   styleUrl: './text-input.component.scss',
@@ -17,12 +18,17 @@ import { MatInput } from '@angular/material/input';
 export class TextInputComponent implements ControlValueAccessor {
   @Input() label = '';
   @Input() type = 'text';
+
   constructor(@Self() public controlDir: NgControl) {
     this.controlDir.valueAccessor = this;
   }
+
   writeValue(obj: any): void {}
+
   registerOnChange(fn: any): void {}
+
   registerOnTouched(fn: any): void {}
+
   get control() {
     return this.controlDir.control as FormControl;
   }

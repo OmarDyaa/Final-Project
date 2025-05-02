@@ -1,0 +1,272 @@
+
+
+.circle-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background 0.2s, transform 0.2s;
+    z-index: 1000;
+  }
+  
+  .circle-button:hover {
+    background: #0056b3;
+    transform: scale(1.1);
+  }
+  
+  .chat-container {
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    width: 400px;
+    max-width: 90%;
+    height: 600px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    z-index: 999;
+    animation: slideIn 0.3s ease;
+  }
+  
+  @keyframes slideIn {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+  
+  .chat-header {
+    background: #c32be9;
+    color: white;
+    padding: 15px;
+    border-radius: 10px 10px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .chat-header h2 {
+    margin: 0;
+    font-size: 1.2em;
+  }
+  
+  .chat-header button {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.2em;
+    cursor: pointer;
+  }
+  
+  .chat-box {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .message-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .message-wrapper.user-message {
+    align-items: flex-end;
+  }
+  
+  .message-wrapper.bot-message {
+    align-items: flex-start;
+  }
+  
+  .message {
+    max-width: 80%;
+    padding: 10px 15px;
+    border-radius: 10px;
+    line-height: 1.4;
+    font-size: 1em;
+  }
+  
+  .message-text {
+    word-wrap: break-word;
+  }
+  
+  .message-text a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .message-text a:hover {
+    text-decoration: underline;
+  }
+  
+  .message-wrapper.user-message .message {
+    background: #a22cd8;
+    color: white;
+    border-bottom-right-radius: 2px;
+  }
+  
+  .message-wrapper.bot-message .message {
+    background: #e9ecef;
+    color: #333;
+    border-bottom-left-radius: 2px;
+  }
+  
+  .product-card {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .product-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  
+  .product-card h3 {
+    margin: 0 0 10px;
+    font-size: 1.1em;
+  }
+  
+  .product-card p {
+    margin: 5px 0;
+  }
+  
+  .product-link {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .product-link:hover {
+    text-decoration: underline;
+  }
+  
+  .typing-indicator {
+    display: flex;
+    gap: 5px;
+  }
+  
+  .typing-indicator span {
+    width: 8px;
+    height: 8px;
+    background: #007bff;
+    border-radius: 50%;
+    animation: bounce 0.6s infinite alternate;
+  }
+  
+  .typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  
+  .typing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+  
+  @keyframes bounce {
+    from { transform: translateY(0); }
+    to { transform: translateY(-5px); }
+  }
+  
+  .message.error {
+    background: #f8d7da;
+    color: #721c24;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .message.error button {
+    background: transparent;
+    border: none;
+    color: #721c24;
+    font-size: 1em;
+    cursor: pointer;
+  }
+  
+  .input-container {
+    padding: 10px;
+    border-top: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .suggestions button {
+    background: #e9ecef;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background 0.2s;
+  }
+  
+  .suggestions button:hover {
+    background: #d1d4d7;
+  }
+  
+  input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    outline: none;
+    font-size: 1em;
+  }
+  
+  .input-container button {
+    padding: 10px 20px;
+    border: none;
+    background: #c32be9;
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  .input-container button:hover {
+    background: #0056b3;
+  }
+  
+  .input-container button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+
+
+  .view-details-link {
+    color: #007bff; /* Bootstrap primary color or your brand color */
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: 500;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.view-details-link:hover {
+    background-color: #e9ecef; /* Light gray hover effect */
+    text-decoration: underline;
+}
+

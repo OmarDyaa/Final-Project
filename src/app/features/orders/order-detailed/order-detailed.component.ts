@@ -1,8 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { OrderService } from '../../../core/services/order.service';
-import { MatCardModule } from '@angular/material/card';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Order } from '../../../shared/models/order';
+import { MatCardModule } from '@angular/material/card';
 import { MatButton } from '@angular/material/button';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { AddressPipe } from '../../../shared/pipes/address.pipe';
@@ -12,13 +12,13 @@ import { AdminService } from '../../../core/services/admin.service';
 
 @Component({
   selector: 'app-order-detailed',
+  standalone: true,
   imports: [
     MatCardModule,
     MatButton,
-    RouterLink,
-    AddressPipe,
     DatePipe,
     CurrencyPipe,
+    AddressPipe,
     PaymentCardPipe,
   ],
   templateUrl: './order-detailed.component.html',
@@ -32,8 +32,8 @@ export class OrderDetailedComponent implements OnInit {
   private router = inject(Router);
   order?: Order;
   buttonText = this.accountService.isAdmin()
-    ? 'Return to Admin'
-    : 'Return to Orders';
+    ? 'Return to admin'
+    : 'Return to orders';
 
   ngOnInit(): void {
     this.loadOrder();
@@ -44,14 +44,16 @@ export class OrderDetailedComponent implements OnInit {
       ? this.router.navigateByUrl('/admin')
       : this.router.navigateByUrl('/orders');
   }
+
   loadOrder() {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     if (!id) return;
-    const loadOderData = this.accountService.isAdmin()
+
+    const loadOrderData = this.accountService.isAdmin()
       ? this.adminService.getOrder(+id)
       : this.orderService.getOrderDetailed(+id);
 
-    this.orderService.getOrderDetailed(+id).subscribe({
+    loadOrderData.subscribe({
       next: (order) => (this.order = order),
     });
   }

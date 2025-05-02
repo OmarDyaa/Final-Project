@@ -1,0 +1,60 @@
+<button class="circle-button" (click)="toggleChat()" aria-label="Toggle chat">
+    💬
+  </button>
+  
+  <div *ngIf="isChatVisible" class="chat-container" role="region" aria-label="Chat interface">
+    <div class="chat-header">
+      <h2>Clothing Store Assistant</h2>
+      <button (click)="toggleChat()" aria-label="Close chat">×</button>
+    </div>
+    <div class="chat-box" role="log" aria-live="polite" #chatBox>
+      <div *ngFor="let chat of chatHistory; trackBy: trackByFn" 
+           class="message-wrapper" [ngClass]="{'user-message': chat.sender === 'User', 'bot-message': chat.sender === 'Bot'}">
+        <div class="message">
+          <!-- Product-specific response (rendered as a card) -->
+          <ng-container *ngIf="chat.sender === 'Bot' && parseProductResponse(chat.message) as product">
+            <div class="product-card">
+              <img [src]="product.pictureUrl" alt="{{ product.name }}" class="product-image" />
+              <h3>{{ product.name }}</h3>
+              <p><strong>Price:</strong> ${{ product.price }}</p>
+              <p><strong>Type:</strong> {{ product.type }}</p>
+              <p><strong>Brand:</strong> {{ product.brand }}</p>
+              <p><strong>Stock:</strong> {{ product.quantityInStock }}</p>
+              <p>{{ product.description }}</p>
+              <a (click)="navigateToProduct(product.url)" class="product-link" [attr.aria-label]="'View details for ' + product.name">View Details</a>
+            </div>
+          </ng-container>
+          <!-- Non-product bot response (e.g., highest_price, lists) -->
+          <ng-container *ngIf="chat.sender === 'Bot' && !parseProductResponse(chat.message)">
+            <div class="message-text bot-response" [innerHTML]="sanitizeMessage(formatBotMessage(chat.message))"></div>
+          </ng-container>
+          <!-- User message -->
+          <ng-container *ngIf="chat.sender === 'User'">
+            <div class="message-text user-response"><strong>You:</strong> {{ chat.message }}</div>
+          </ng-container>
+        </div>
+      </div>
+      <!-- Loading indicator -->
+      <div *ngIf="isLoading" class="message bot-message" aria-label="Bot is typing">
+        <div class="typing-indicator">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+      <!-- Error message -->
+      <div *ngIf="errorMessage" class="message error" role="alert">
+        {{ errorMessage }}
+        <button (click)="clearError()" aria-label="Dismiss error">×</button>
+      </div>
+    </div>
+    <div class="input-container">
+      <div class="suggestions" *ngIf="!userMessage && !isLoading">
+        <button *ngFor="let suggestion of suggestions" (click)="userMessage = suggestion; sendMessage()" 
+                [attr.aria-label]="'Suggested query: ' + suggestion">
+          {{ suggestion }}
+        </button>
+      </div>
+      <input #chatInput [(ngModel)]="userMessage" type="text" placeholder="Ask about products, types, brands, or stock..." 
+             (keyup.enter)="sendMessage()" aria-label="Message input" maxlength="500" [disabled]="isLoading" />
+      <button (click)="sendMessage()" [disabled]="!userMessage.trim() || isLoading" aria-label="Send message">Send</button>
+    </div>
+  </div>

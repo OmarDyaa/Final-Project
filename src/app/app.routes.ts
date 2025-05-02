@@ -7,6 +7,13 @@ import { NotFoundComponent } from './shared/components/not-found/not-found.compo
 import { ServerErrorComponent } from './shared/components/server-error/server-error.component';
 import { CartComponent } from './features/cart/cart.component';
 import { authGuard } from './core/guards/auth.guard';
+import { emptyCartGuard } from './core/guards/empty-cart.guard';
+import { CheckoutSuccessComponent } from './features/checkout/checkout-success/checkout-success.component';
+import { ProfileComponent } from './features/account/profile/profile.component';
+import { OrderDetailedComponent } from './features/orders/order-detailed/order-detailed.component';
+import { OrderComponent } from './features/orders/order.component';
+import { orderCompleteGuard } from './core/guards/order-complete.guard';
+import { AdminComponent } from './features/admin/admin.component';
 import { adminGuard } from './core/guards/admin.guard';
 // import { adminGuard } from './core/guards/admin.guard';
 
@@ -34,7 +41,7 @@ export const routes: Routes = [
   {
     path: 'admin',
     loadComponent: () =>
-      import('./features/admin/admin/admin.component').then(c => c.AdminComponent),
+      import('./features/admin/admin.component').then(c => c.AdminComponent),
     canActivate: [authGuard, adminGuard]},
  
 
