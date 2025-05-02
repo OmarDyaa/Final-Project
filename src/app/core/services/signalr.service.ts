@@ -5,7 +5,7 @@ import {
   HubConnectionBuilder,
   HubConnectionState,
   LogLevel,
-  HttpTransportType
+  HttpTransportType,
 } from '@microsoft/signalr';
 import { Order } from '../../shared/models/order';
 import { SnackbarService } from './snackbar.service';
@@ -13,7 +13,6 @@ import { SnackbarService } from './snackbar.service';
 @Injectable({
   providedIn: 'root',
 })
-
 export class SignalrService {
   hubUrl = environment.hubUrl;
   hubConnection?: HubConnection;
@@ -29,19 +28,24 @@ export class SignalrService {
           // Don't skip negotiation to allow fallback to other transport methods
           skipNegotiation: false,
           // Allow multiple transport types instead of just WebSockets
-          transport: HttpTransportType.WebSockets | HttpTransportType.LongPolling
+          transport:
+            HttpTransportType.WebSockets | HttpTransportType.LongPolling,
         })
         .configureLogging(LogLevel.Information)
         .withAutomaticReconnect([0, 2000, 5000, 10000, 20000]) // More retry attempts with increasing delays
         .build();
 
-      this.hubConnection.start()
+      this.hubConnection
+        .start()
         .then(() => {
           console.log('SignalR connected successfully');
-          
-          this.hubConnection?.on('OrderCompleteNotification', (order: Order) => {
-            this.orderSignal.set(order);
-          });
+
+          this.hubConnection?.on(
+            'OrderCompleteNotification',
+            (order: Order) => {
+              this.orderSignal.set(order);
+            }
+          );
         })
         .catch((error) => {
           console.error('SignalR connection error:', error);

@@ -7,10 +7,16 @@ import { HttpClient } from '@angular/common/http';
 import { Product } from './shared/models/product';
 import { Pagination } from './shared/models/pagination';
 import { ShopService } from './core/services/shop.service';
+import { ChatbotComponent } from './features/chatbot/chatbot.component';
 
 @Component({
   selector: 'app-root',
-  imports: [MatSlideToggleModule, HeaderComponent, RouterOutlet],
+  imports: [
+    MatSlideToggleModule,
+    HeaderComponent,
+    RouterOutlet,
+    ChatbotComponent,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

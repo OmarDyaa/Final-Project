@@ -58,7 +58,6 @@ import { SnackbarService } from '../../core/services/snackbar.service';
     RouterLink,
     MatDialogModule,
     MatMenuModule,
-    MatSelectionList,
     MatListModule,
     MatDividerModule,
   ],
