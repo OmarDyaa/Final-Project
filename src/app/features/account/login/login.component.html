@@ -12,7 +12,7 @@
         matInput
       />
     </mat-form-field>
-    <mat-form-field appearance="outline" class="w-full mb-4">
+    <mat-form-field appearance="outline" class="w-full mb-2">
       <mat-label>Password</mat-label>
       <input
         formControlName="password"
@@ -22,5 +22,19 @@
       />
     </mat-form-field>
     <button mat-flat-button type="submit" class="w-full py-2">Sign in</button>
+    <!-- Forgot Password button -->
+    <div class="flex justify-end text-md mt-4">
+      <button 
+        type="button" 
+        (click)="ForgotPassword()" 
+        class="font-semibold text-indigo-600 hover:text-indigo-500">
+        Forgot password?
+      </button>
+    </div>
   </form>
 </mat-card>
+
+
+
+
+

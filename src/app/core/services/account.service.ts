@@ -61,4 +61,10 @@ export class AccountService {
       this.baseUrl + 'account/auth-status'
     );
   }
+
+  forgetpassword(email: string) {
+    return this.http.post(this.baseUrl + 'account/forgetpassword', { email }, {
+      responseType: 'text',
+    });
+  }
 }
