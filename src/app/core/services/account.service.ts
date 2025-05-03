@@ -62,9 +62,16 @@ export class AccountService {
     );
   }
 
+
   forgetpassword(email: string) {
-    return this.http.post(this.baseUrl + 'account/forgetpassword', { email }, {
+    const params = new HttpParams().set('email', email); // Add email as a query parameter
+    return this.http.get(this.baseUrl + 'account/forget-password', { params, responseType: 'text' });
+  }
+
+  resetPassword(data: { email: string; token: string; newPassword: string }) {
+    return this.http.post(this.baseUrl + 'account/reset-password', data, {
       responseType: 'text',
     });
   }
+
 }

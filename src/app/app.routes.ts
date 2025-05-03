@@ -34,6 +34,13 @@ export const routes: Routes = [
     loadChildren:() =>import('./features/account/routes')
     .then(m => m.accountRoutes)
   },
+  {
+    path: 'reset-password',
+    loadComponent: () =>
+      import('./features/account/reset-password/reset-password.component').then(
+        (m) => m.ResetPasswordComponent
+      ),
+  },
   
   { path: 'test-error', component: TestErrorComponent },
   { path: 'not-found', component: NotFoundComponent },
