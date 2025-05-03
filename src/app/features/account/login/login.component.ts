@@ -7,6 +7,7 @@ import { MatInput } from '@angular/material/input';
 import { AccountService } from '../../../core/services/account.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -54,4 +55,22 @@ export class LoginComponent {
       },
     });
   }
+
+  ForgotPassword() {
+    const email = this.loginForm.value.email;
+    if (email) {
+      this.accountService.forgetpassword(email).subscribe({
+        next: () => {
+          alert('Password reset link sent to your email.');
+        },
+        error: (err: any) => {
+          console.error('Error sending password reset link:', err);
+          alert('Error sending password reset link. Please try again later.');
+        },
+      });
+    } else {
+      alert('Please enter a valid email.');
+    }
+  }
+
 }
