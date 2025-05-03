@@ -13,6 +13,7 @@ import { IsAdminDirective } from '../../shared/directives/is-admin.directive';
 import { IsUserDirective } from '../../shared/directives/is-user.directive';
 import { NgIf } from '@angular/common';
 import { IsLoggedOutDirective } from '../../shared/directives/is-loggedout.directive';
+import { IsEditorDirective } from '../../shared/directives/is-editor.directive';
 
 @Component({
   selector: 'app-header',
@@ -30,6 +31,7 @@ import { IsLoggedOutDirective } from '../../shared/directives/is-loggedout.direc
     MatMenuItem,
     IsAdminDirective,
     IsUserDirective,
+    IsEditorDirective,
     NgIf,
     IsLoggedOutDirective,
   ],

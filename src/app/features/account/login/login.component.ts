@@ -44,6 +44,8 @@ export class LoginComponent {
           next: () => {
             if (this.accountService.isAdmin()) {
               this.router.navigateByUrl('/admin');
+            } else if (this.accountService.isEditor()) {
+              this.router.navigateByUrl('/editor');
             } else {
               this.router.navigateByUrl(this.returnUrl);
             }

@@ -15,35 +15,46 @@ import { OrderComponent } from './features/orders/order.component';
 import { orderCompleteGuard } from './core/guards/order-complete.guard';
 import { AdminComponent } from './features/admin/admin.component';
 import { adminGuard } from './core/guards/admin.guard';
-// import { adminGuard } from './core/guards/admin.guard';
+import { editorGuard } from './core/guards/editor.guard';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'shop', component: ShopComponent },
   { path: 'shop/:id', component: ProductDetailsComponent },
   { path: 'cart', component: CartComponent },
-  {path:'checkout' ,
-    loadChildren:() =>import('./features/checkout/routes')
-    .then(m => m.checkoutRoutes)
+  {
+    path: 'checkout',
+    loadChildren: () =>
+      import('./features/checkout/routes').then((m) => m.checkoutRoutes),
   },
-  {path:'orders' ,
-    loadChildren:() =>import('./features/orders/routes')
-    .then(m => m.orderRoutes)
+  {
+    path: 'orders',
+    loadChildren: () =>
+      import('./features/orders/routes').then((m) => m.orderRoutes),
   },
-  {path:'account' ,
-    loadChildren:() =>import('./features/account/routes')
-    .then(m => m.accountRoutes)
+  {
+    path: 'account',
+    loadChildren: () =>
+      import('./features/account/routes').then((m) => m.accountRoutes),
   },
-  
+
   { path: 'test-error', component: TestErrorComponent },
   { path: 'not-found', component: NotFoundComponent },
   { path: 'server-error', component: ServerErrorComponent },
   {
     path: 'admin',
     loadComponent: () =>
-      import('./features/admin/admin.component').then(c => c.AdminComponent),
-    canActivate: [authGuard, adminGuard]},
- 
+      import('./features/admin/admin.component').then((c) => c.AdminComponent),
+    canActivate: [authGuard, adminGuard],
+  },
+  {
+    path: 'editor',
+    loadComponent: () =>
+      import('./features/editor/editor.component').then(
+        (c) => c.EditorComponent
+      ),
+    canActivate: [authGuard, editorGuard],
+  },
 
   { path: '**', redirectTo: 'not-found', pathMatch: 'full' },
 ];

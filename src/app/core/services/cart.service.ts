@@ -95,13 +95,21 @@ export class CartService {
     }
   }
 
+  clearCart() {
+    localStorage.removeItem('cart_id');
+    this.cart.set(null);
+  }
+
   deleteCart() {
-    this.http.delete(this.baseUrl + 'cart?id=' + this.cart()?.id).subscribe({
-      next: () => {
-        localStorage.removeItem('cart_id');
-        this.cart.set(null);
-      },
-    });
+    if (this.cart()?.id) {
+      this.http.delete(this.baseUrl + 'cart?id=' + this.cart()?.id).subscribe({
+        next: () => {
+          this.clearCart();
+        },
+      });
+    } else {
+      this.clearCart();
+    }
   }
 
   private addOrUpdateItem(

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, effect, inject, OnDestroy, OnInit } from '@angular/core';
 import { ShopService } from '../../../core/services/shop.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Product } from '../../../shared/models/product';
@@ -10,6 +10,7 @@ import { MatInput } from '@angular/material/input';
 import { MatDivider } from '@angular/material/divider';
 import { CartService } from '../../../core/services/cart.service';
 import { FormsModule } from '@angular/forms';
+import { ProductUpdateService } from '../../../core/services/product-update.service';
 
 @Component({
   selector: 'app-product-details',
@@ -26,16 +27,25 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.scss',
 })
-export class ProductDetailsComponent implements OnInit {
+export class ProductDetailsComponent implements OnInit, OnDestroy {
   private shopService = inject(ShopService);
   private activatedRoute = inject(ActivatedRoute);
   private cartService = inject(CartService);
+  private productUpdateService = inject(ProductUpdateService);
   product?: Product;
   quantityInCart = 0;
   quantity = 1;
 
   ngOnInit(): void {
     this.loadProduct();
+
+    // Subscribe to product updates
+    effect(() => {
+      const updatedProduct = this.productUpdateService.getProductUpdates()();
+      if (updatedProduct && updatedProduct.id === this.product?.id) {
+        this.product = updatedProduct;
+      }
+    });
   }
 
   loadProduct() {
@@ -73,5 +83,9 @@ export class ProductDetailsComponent implements OnInit {
 
   getButtonText() {
     return this.quantityInCart > 0 ? 'Update cart' : 'Add to cart';
+  }
+
+  ngOnDestroy(): void {
+    this.productUpdateService.clearUpdate();
   }
 }

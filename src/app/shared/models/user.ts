@@ -2,7 +2,8 @@ export type User = {
   firstName: string;
   lastName: string;
   email: string;
-  address: Address;
+  phoneNumber?: string;
+  address?: Address;
   roles: string | string[];
 };
 export type Address = {

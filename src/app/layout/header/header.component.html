@@ -6,12 +6,12 @@
   >
     <ng-container *ngIf="true">
       <ng-container *appIsAdmin>
-        <img src="/images/logo.png" alt="app logo" class="max-h-16" />
+        <img src="/images/logo1.png" alt="app logo" class="max-h-16" />
       </ng-container>
       <ng-container *appIsUser>
         <img
           routerLink="/"
-          src="/images/logo.png"
+          src="/images/logo1.png"
           alt="app logo"
           class="max-h-16 cursor-pointer"
         />
@@ -19,7 +19,7 @@
       <ng-container *appIsLoggedOut>
         <img
           routerLink="/"
-          src="/images/logo.png"
+          src="/images/logo1.png"
           alt="app logo"
           class="max-h-16 cursor-pointer"
         />
@@ -107,6 +107,10 @@
   <a mat-menu-item *appIsAdmin routerLink="/admin">
     <mat-icon>admin_panel_settings</mat-icon>
     <span>Admin</span>
+  </a>
+  <a mat-menu-item *appIsEditor routerLink="/editor">
+    <mat-icon>edit</mat-icon>
+    <span>Product Management</span>
   </a>
   <button mat-menu-item class="px-3" (click)="logout()">
     <mat-icon>logout</mat-icon>

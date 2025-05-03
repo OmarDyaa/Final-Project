@@ -1,0 +1,82 @@
+<div class="container mx-auto p-4">
+  <div class="flex justify-between items-center mb-4">
+    <h1 class="text-2xl font-semibold">Product Management</h1>
+    <!-- <button mat-flat-button color="primary" (click)="openProductDialog()">
+      <mat-icon>add</mat-icon>
+      Add New Product
+    </button> -->
+  </div>
+
+  <div class="mat-elevation-z8 relative">
+    @if (loading) {
+    <div
+      class="absolute inset-0 bg-white/80 flex items-center justify-center z-10"
+    >
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+    }
+    <table mat-table [dataSource]="productDataSource" class="w-full">
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>ID</th>
+        <td mat-cell *matCellDef="let product">{{ product.id }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let product">{{ product.name }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef>Price</th>
+        <td mat-cell *matCellDef="let product">
+          {{ product.price | currency }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef>Type</th>
+        <td mat-cell *matCellDef="let product">{{ product.type }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="brand">
+        <th mat-header-cell *matHeaderCellDef>Brand</th>
+        <td mat-cell *matCellDef="let product">{{ product.brand }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="stock">
+        <th mat-header-cell *matHeaderCellDef>Stock</th>
+        <td mat-cell *matCellDef="let product">
+          {{ product.quantityInStock }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let product">
+          <div class="flex gap-2">
+            <button
+              matTooltip="Edit"
+              mat-icon-button
+              [disabled]="loading"
+              (click)="openProductDialog(product)"
+            >
+              <mat-icon color="primary">edit</mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="productColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: productColumns"></tr>
+    </table>
+
+    <mat-paginator
+      [pageSizeOptions]="[5, 10, 20]"
+      [pageSize]="shopParams.pageSize"
+      [length]="totalProducts"
+      (page)="onProductPageChange($event)"
+      showFirstLastButtons
+    >
+    </mat-paginator>
+  </div>
+</div>

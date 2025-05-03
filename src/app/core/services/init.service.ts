@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { CartService } from './cart.service';
-import { forkJoin, of, tap } from 'rxjs';
+import { of, tap } from 'rxjs';
 import { AccountService } from './account.service';
 import { SignalrService } from './signalr.service';
 
@@ -13,16 +13,28 @@ export class InitService {
   private signalrService = inject(SignalrService);
 
   init() {
-    const cartId = localStorage.getItem('cart_id');
-    const cart$ = cartId ? this.cartService.getCart(cartId) : of(null);
-
-    return forkJoin({
-      cart: cart$,
-      user: this.accountService.getUserInfo().pipe(
-        tap((user) => {
-          if (user) this.signalrService.createHubConnection();
-        })
-      ),
-    });
+    return this.accountService.getUserInfo().pipe(
+      tap((user) => {
+        if (user) {
+          this.signalrService.createHubConnection();
+          // Only load cart for customer role
+          if (!user.roles.includes('Admin') && !user.roles.includes('Editor')) {
+            const cartId = localStorage.getItem('cart_id');
+            if (cartId) {
+              this.cartService.getCart(cartId).subscribe();
+            }
+          } else {
+            // Clear any existing cart for admin/editor roles
+            this.cartService.clearCart();
+          }
+        } else {
+          // Handle not logged in state
+          const cartId = localStorage.getItem('cart_id');
+          if (cartId) {
+            this.cartService.getCart(cartId).subscribe();
+          }
+        }
+      })
+    );
   }
 }

@@ -5,6 +5,24 @@ import { OrderParams } from '../../shared/models/orderParams';
 import { Pagination } from '../../shared/models/pagination';
 import { Order } from '../../shared/models/order';
 import { Product } from '../../shared/models/product';
+import { User } from '../../shared/models/user';
+import { catchError, map, Observable, of } from 'rxjs';
+
+interface UserResponse {
+  id: string;
+  name: string;
+  userName: string;
+  email: string;
+  roles: string;
+}
+
+interface UsersResponse {
+  allUsersCount: number;
+  adminsCount: number;
+  editorsCount: number;
+  customersCount: number;
+  users: UserResponse[];
+}
 
 @Injectable({
   providedIn: 'root',
@@ -39,7 +57,6 @@ export class AdminService {
     );
   }
 
-  // Product management
   createProduct(product: Partial<Product>) {
     return this.http.post<Product>(this.baseUrl + 'products', product);
   }
@@ -53,5 +70,71 @@ export class AdminService {
 
   deleteProduct(id: number) {
     return this.http.delete<void>(this.baseUrl + 'products/' + id);
+  }
+
+  getUsers(): Observable<UsersResponse> {
+    return this.http.get<UsersResponse>(this.baseUrl + 'admin/users');
+  }
+
+  addUser(user: User): Observable<boolean> {
+    return this.http
+      .post(this.baseUrl + 'admin/adduser', user, { responseType: 'text' })
+      .pipe(
+        map((response) => {
+          if (response.includes('successfully')) {
+            return true;
+          }
+          throw new Error('Failed to create user');
+        }),
+        catchError((error) => {
+          console.error('Error adding user:', error);
+          return of(false);
+        })
+      );
+  }
+
+  resetUserPassword(email: string): Observable<boolean> {
+    return this.http
+      .post(
+        this.baseUrl + 'admin/reset-password',
+        { email },
+        { responseType: 'text' }
+      )
+      .pipe(
+        map((response) => {
+          if (response.includes('successfully')) {
+            return true;
+          }
+          throw new Error('Failed to reset password');
+        }),
+        catchError((error) => {
+          console.error('Error resetting password:', error);
+          return of(false);
+        })
+      );
+  }
+
+  toggleUserBlock(
+    email: string,
+    action: 'block' | 'unblock'
+  ): Observable<boolean> {
+    return this.http
+      .post(
+        this.baseUrl + `admin/${action}-user`,
+        { email },
+        { responseType: 'text' }
+      )
+      .pipe(
+        map((response) => {
+          if (response.includes('successfully')) {
+            return true;
+          }
+          throw new Error(`Failed to ${action} user`);
+        }),
+        catchError((error) => {
+          console.error(`Error ${action}ing user:`, error);
+          return of(false);
+        })
+      );
   }
 }

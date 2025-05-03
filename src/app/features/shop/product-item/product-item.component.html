@@ -2,6 +2,7 @@
 <mat-card
   appearance="raised"
   routerLink="/shop/{{ product.id }}"
+  [class.opacity-75]="product.quantityInStock <= 0"
   class="product-card"
 >
   <div class="relative group">
@@ -36,14 +37,16 @@
 
     <div class="mt-4 pt-2 border-t border-gray-100">
       <div class="flex items-center justify-between">
-        <p class="text-lg font-semibold text-primary">
+        <p
+          class="text-lg font-semibold"
+          [class.text-gray-500]="product.quantityInStock <= 0"
+        >
           {{ product.price | currency }}
         </p>
         <div class="text-sm">
           <span
             [class.text-green-600]="product.quantityInStock > 0"
-            [class.text-red-500]="!product.quantityInStock"
-            [class.line-through]="!product.quantityInStock"
+            [class.text-red-500]="product.quantityInStock <= 0"
           >
             {{ product.quantityInStock > 0 ? "In Stock" : "Out of Stock" }}
           </span>

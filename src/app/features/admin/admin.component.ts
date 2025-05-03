@@ -31,6 +31,10 @@ import {
 } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
+import {
+  MatSlideToggleModule,
+  MatSlideToggleChange,
+} from '@angular/material/slide-toggle';
 import { Order } from '../../shared/models/order';
 import { AdminService } from '../../core/services/admin.service';
 import { OrderParams } from '../../shared/models/orderParams';
@@ -40,6 +44,10 @@ import { ShopParams } from '../../shared/models/shopParams';
 import { ShopService } from '../../core/services/shop.service';
 import { ProductFormDialogComponent } from './product-form-dialog/product-form-dialog.component';
 import { SnackbarService } from '../../core/services/snackbar.service';
+import { User } from '../../shared/models/user';
+import { UserFormDialogComponent } from './user-form-dialog/user-form-dialog.component';
+import { catchError, finalize, of } from 'rxjs';
+import { ProductUpdateService } from '../../core/services/product-update.service';
 
 @Component({
   selector: 'app-admin',
@@ -60,6 +68,7 @@ import { SnackbarService } from '../../core/services/snackbar.service';
     MatMenuModule,
     MatListModule,
     MatDividerModule,
+    MatSlideToggleModule,
   ],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.scss',
@@ -70,6 +79,7 @@ export class AdminComponent implements OnInit {
   private shopService = inject(ShopService);
   private dialog = inject(MatDialog);
   private snackbar = inject(SnackbarService);
+  private productUpdateService = inject(ProductUpdateService);
 
   // Order management properties
   displayedColumns = [
@@ -98,9 +108,26 @@ export class AdminComponent implements OnInit {
   totalProducts = 0;
   types: string[] = [];
 
+  // User management properties
+  userColumns = ['email', 'userName', 'name', 'roles'];
+  userDataSource = new MatTableDataSource<any>();
+  statsColumns = [
+    'allUsersCount',
+    'adminsCount',
+    'editorsCount',
+    'customersCount',
+  ];
+  userStats = {
+    allUsersCount: 0,
+    adminsCount: 0,
+    editorsCount: 0,
+    customersCount: 0,
+  };
+
   ngOnInit(): void {
     this.loadOrders();
     this.loadProducts();
+    this.loadUsers();
   }
 
   loadOrders() {
@@ -173,18 +200,20 @@ export class AdminComponent implements OnInit {
       if (product) {
         // Update existing product
         this.adminService.updateProduct(result).subscribe({
-          next: () => {
+          next: (updatedProduct) => {
             this.loadProducts();
             this.snackbar.success('Product updated successfully');
+            this.productUpdateService.notifyProductUpdate(updatedProduct);
           },
           error: (error) => this.snackbar.error('Failed to update product'),
         });
       } else {
         // Create new product
         this.adminService.createProduct(result).subscribe({
-          next: () => {
+          next: (newProduct) => {
             this.loadProducts();
             this.snackbar.success('Product created successfully');
+            this.productUpdateService.notifyProductUpdate(newProduct);
           },
           error: (error) => this.snackbar.error('Failed to create product'),
         });
@@ -213,5 +242,40 @@ export class AdminComponent implements OnInit {
     this.shopParams.sort = sortType;
     this.shopParams.pageNumber = 1;
     this.loadProducts();
+  }
+
+  loadUsers() {
+    this.adminService.getUsers().subscribe({
+      next: (response) => {
+        this.userStats = {
+          allUsersCount: response.allUsersCount,
+          adminsCount: response.adminsCount,
+          editorsCount: response.editorsCount,
+          customersCount: response.customersCount,
+        };
+        this.userDataSource.data = response.users;
+      },
+      error: (error) => this.snackbar.error('Failed to load users'),
+    });
+  }
+
+  async openUserDialog() {
+    const dialogRef = this.dialog.open(UserFormDialogComponent, {
+      width: '500px',
+    });
+
+    const result = await dialogRef.afterClosed().toPromise();
+    if (result) {
+      this.adminService.addUser(result).subscribe({
+        next: (success) => {
+          if (success) {
+            this.snackbar.success('User created successfully');
+            this.loadUsers();
+          } else {
+            this.snackbar.error('Failed to create user');
+          }
+        },
+      });
+    }
   }
 }
