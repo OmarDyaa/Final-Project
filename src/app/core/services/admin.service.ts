@@ -41,13 +41,22 @@ export class AdminService {
     }
     params = params.append('pageIndex', orderParams.pageNumber);
     params = params.append('pageSize', orderParams.pageSize);
+    // Add cache-busting parameter
+    params = params.append('_t', new Date().getTime().toString());
+
     return this.http.get<Pagination<Order>>(this.baseUrl + 'admin/orders', {
       params,
     });
   }
 
   getOrder(id: number) {
-    return this.http.get<Order>(this.baseUrl + 'admin/orders/' + id);
+    const params = new HttpParams().append(
+      '_t',
+      new Date().getTime().toString()
+    );
+    return this.http.get<Order>(this.baseUrl + 'admin/orders/' + id, {
+      params,
+    });
   }
 
   refundOrder(id: number) {
@@ -62,9 +71,17 @@ export class AdminService {
   }
 
   updateProduct(product: Partial<Product>) {
+    // Add cache control headers to ensure updates are properly persisted
+    const headers = {
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      Pragma: 'no-cache',
+      Expires: '0',
+    };
+
     return this.http.put<Product>(
       this.baseUrl + 'products/' + product.id,
-      product
+      product,
+      { headers }
     );
   }
 
@@ -73,7 +90,13 @@ export class AdminService {
   }
 
   getUsers(): Observable<UsersResponse> {
-    return this.http.get<UsersResponse>(this.baseUrl + 'admin/users');
+    const params = new HttpParams().append(
+      '_t',
+      new Date().getTime().toString()
+    );
+    return this.http.get<UsersResponse>(this.baseUrl + 'admin/users', {
+      params,
+    });
   }
 
   addUser(user: User): Observable<boolean> {

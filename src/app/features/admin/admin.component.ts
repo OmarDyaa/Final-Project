@@ -48,6 +48,7 @@ import { User } from '../../shared/models/user';
 import { UserFormDialogComponent } from './user-form-dialog/user-form-dialog.component';
 import { catchError, finalize, of } from 'rxjs';
 import { ProductUpdateService } from '../../core/services/product-update.service';
+import { SignalrService } from '../../core/services/signalr.service';
 
 @Component({
   selector: 'app-admin',
@@ -80,6 +81,7 @@ export class AdminComponent implements OnInit {
   private dialog = inject(MatDialog);
   private snackbar = inject(SnackbarService);
   private productUpdateService = inject(ProductUpdateService);
+  private signalrService = inject(SignalrService);
 
   // Order management properties
   displayedColumns = [
@@ -173,6 +175,9 @@ export class AdminComponent implements OnInit {
   }
 
   loadProducts() {
+    // Reset cache before loading products to ensure we get fresh data
+    this.shopParams.timestamp = new Date().getTime();
+
     this.shopService.getProducts(this.shopParams).subscribe({
       next: (response) => {
         if (response.data) {
@@ -198,24 +203,80 @@ export class AdminComponent implements OnInit {
     const result = await dialogRef.afterClosed().toPromise();
     if (result) {
       if (product) {
+        // Create a merged product using both original product and form result
+        // This ensures we don't lose any properties in the update
+        const updatedProductData = {
+          ...product,
+          ...result,
+          id: product.id, // Ensure the ID doesn't get lost
+        };
+
         // Update existing product
-        this.adminService.updateProduct(result).subscribe({
+        this.adminService.updateProduct(updatedProductData).subscribe({
           next: (updatedProduct) => {
-            this.loadProducts();
-            this.snackbar.success('Product updated successfully');
-            this.productUpdateService.notifyProductUpdate(updatedProduct);
+            if (updatedProduct) {
+              // First update the data table with the latest product data
+              const data = [...this.productDataSource.data];
+              const index = data.findIndex((p) => p.id === updatedProduct.id);
+              if (index !== -1) {
+                data[index] = updatedProduct;
+                this.productDataSource.data = data;
+              }
+
+              // Then notify all components about the updated product
+              this.productUpdateService.notifyProductUpdate(updatedProduct);
+
+              // Show success message
+              this.snackbar.success('Product updated successfully');
+            } else {
+              // In case the API returns null but update succeeded
+              // Use our merged data to update the UI
+              const data = [...this.productDataSource.data];
+              const index = data.findIndex(
+                (p) => p.id === updatedProductData.id
+              );
+              if (index !== -1) {
+                data[index] = updatedProductData;
+                this.productDataSource.data = data;
+
+                // Notify components using our merged data
+                this.productUpdateService.notifyProductUpdate(
+                  updatedProductData
+                );
+              }
+
+              this.snackbar.success('Product updated successfully');
+            }
           },
-          error: (error) => this.snackbar.error('Failed to update product'),
+          error: (error) => {
+            console.error('Error updating product:', error);
+            this.snackbar.error('Failed to update product');
+          },
         });
       } else {
         // Create new product
         this.adminService.createProduct(result).subscribe({
           next: (newProduct) => {
-            this.loadProducts();
-            this.snackbar.success('Product created successfully');
-            this.productUpdateService.notifyProductUpdate(newProduct);
+            if (newProduct) {
+              // Add the new product to the table directly
+              const data = [...this.productDataSource.data];
+              data.unshift(newProduct); // Add to beginning of array
+              this.productDataSource.data = data;
+
+              // Notify all components about the new product
+              this.productUpdateService.notifyProductUpdate(newProduct);
+
+              this.snackbar.success('Product created successfully');
+            } else {
+              // Fallback to refresh if API returns null
+              this.loadProducts();
+              this.snackbar.success('Product created successfully');
+            }
           },
-          error: (error) => this.snackbar.error('Failed to create product'),
+          error: (error) => {
+            console.error('Error creating product:', error);
+            this.snackbar.error('Failed to create product');
+          },
         });
       }
     }

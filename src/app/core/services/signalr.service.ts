@@ -9,6 +9,8 @@ import {
 } from '@microsoft/signalr';
 import { Order } from '../../shared/models/order';
 import { SnackbarService } from './snackbar.service';
+import { Product } from '../../shared/models/product';
+import { ProductUpdateService } from './product-update.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +20,10 @@ export class SignalrService {
   hubConnection?: HubConnection;
   orderSignal = signal<Order | null>(null);
 
-  constructor(private snackbarService: SnackbarService) {}
+  constructor(
+    private snackbarService: SnackbarService,
+    private productUpdateService: ProductUpdateService
+  ) {}
 
   createHubConnection() {
     try {
@@ -44,6 +49,26 @@ export class SignalrService {
             'OrderCompleteNotification',
             (order: Order) => {
               this.orderSignal.set(order);
+            }
+          );
+
+          // Add listener for product updates
+          this.hubConnection?.on(
+            'ProductUpdateNotification',
+            (product: Product) => {
+              console.log('Product update received via SignalR:', product);
+              this.productUpdateService.notifyProductUpdate(product);
+            }
+          );
+
+          // Add listener for product deletions
+          this.hubConnection?.on(
+            'ProductDeleteNotification',
+            (productId: number) => {
+              console.log('Product deletion received via SignalR:', productId);
+              // You may need to handle product deletions in the UI
+              // For now, we'll use the notifyProductUpdate with null to signal a removal
+              // We can handle this case in the component effects
             }
           );
         })

@@ -6,11 +6,12 @@ import { MatCard } from '@angular/material/card';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
+import { SnackbarService } from '../../../core/services/snackbar.service';
 
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  templateUrl: './reset-password.component.html',  
+  templateUrl: './reset-password.component.html',
   imports: [
     ReactiveFormsModule,
     MatCard,
@@ -26,6 +27,7 @@ export class ResetPasswordComponent {
   private accountService = inject(AccountService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private snackbarService = inject(SnackbarService);
 
   resetPasswordForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -43,16 +45,29 @@ export class ResetPasswordComponent {
 
   onSubmit() {
     if (this.resetPasswordForm.valid) {
-      this.accountService.resetPassword(this.resetPasswordForm.getRawValue() as { email: string; token: string; newPassword: string }).subscribe({
-        next: () => {
-          alert('Password reset successfully. You can now log in.');
-          this.router.navigate(['/login']);
-        },
-        error: (err) => {
-          console.error('Error resetting password:', err);
-          alert('Error resetting password. Please try again.');
-        },
-      });
+      this.accountService
+        .resetPassword(
+          this.resetPasswordForm.getRawValue() as {
+            email: string;
+            token: string;
+            newPassword: string;
+          }
+        )
+        .subscribe({
+          next: () => {
+            // Show a more personalized success message and redirect to login
+            this.snackbarService.success(
+              'Password has been reset successfully! You can now log in with your new password.'
+            );
+            this.router.navigate(['/account/login']);
+          },
+          error: (err) => {
+            console.error('Error resetting password:', err);
+            this.snackbarService.error(
+              'Error resetting password. Please try again.'
+            );
+          },
+        });
     }
   }
 }

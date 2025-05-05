@@ -5,4 +5,5 @@ export class ShopParams {
   pageNumber = 1;
   pageSize = 10;
   search = '';
+  timestamp?: number; // Add timestamp property for cache-busting
 }

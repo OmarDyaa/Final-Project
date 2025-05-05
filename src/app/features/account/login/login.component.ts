@@ -6,7 +6,7 @@ import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { AccountService } from '../../../core/services/account.service';
 import { ActivatedRoute, Router } from '@angular/router';
-
+import { SnackbarService } from '../../../core/services/snackbar.service';
 
 @Component({
   selector: 'app-login',
@@ -27,6 +27,7 @@ export class LoginComponent {
   private accountService = inject(AccountService);
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
+  private snackbarService = inject(SnackbarService);
   returnUrl = '/shop';
 
   constructor() {
@@ -61,16 +62,19 @@ export class LoginComponent {
     if (email) {
       this.accountService.forgetpassword(email).subscribe({
         next: () => {
-          alert('Password reset link sent to your email.');
+          this.snackbarService.success(
+            'Password reset link sent to your email. Please check your inbox.'
+          );
         },
         error: (err: any) => {
           console.error('Error sending password reset link:', err);
-          alert('Error sending password reset link. Please try again later.');
+          this.snackbarService.error(
+            'Unable to send password reset link. Please try again later.'
+          );
         },
       });
     } else {
-      alert('Please enter a valid email.');
+      this.snackbarService.error('Please enter your email address first.');
     }
   }
-
 }
